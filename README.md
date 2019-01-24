@@ -1,2 +1,3 @@
-# that-was-random
-An alternative to using the shuffle button to help you listen to songs that you've been missing out on.
+# RU Software Engineering
+
+This is a repository intended to be used for a Software Engineering class at Rowan Univerity.
