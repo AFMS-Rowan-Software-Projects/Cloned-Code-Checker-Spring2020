@@ -79,5 +79,4 @@ Ignored Tokens
 blank,
   traditional_comment,
   documentation_comment,
-  end_of_line_comment,
-  directive;
+  end_of_line_comment;
