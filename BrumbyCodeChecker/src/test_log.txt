@@ -1,0 +1,5 @@
+3/6/19 4:14 P.M.
+Wes Holman
+Tested file IO by calling the handler method and printing the results, which matched completely.
+The similarity method was given a single-element ArrayList to compare to an identical ArrayList, and it returned 1.0 correctly.
+
