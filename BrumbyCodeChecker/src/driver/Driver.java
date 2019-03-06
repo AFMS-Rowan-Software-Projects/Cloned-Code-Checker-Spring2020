@@ -20,9 +20,13 @@ public class Driver{
       
       /*Insert appropriate call to Scanner*/
       ArrayList<Token> tokens = new ArrayList<Token>();
-      tokens.add(new TIdentifier("Ham Sandwiches"));
+      tokens.add(new TIdentifier("Michelle is the greatest sponsor!"));
       double similarity = Parser.similarity(tokens, tokens);
-      System.out.print(similarity);
+      System.out.println("Expected 1.0: " + similarity);
+      ArrayList<Token> tokens2 = new ArrayList<Token>();
+      tokens2.add(new TKeyword("while"));
+      similarity = Parser.similarity(tokens, tokens2);
+      System.out.println("Expected not 1.0: " +similarity);
    }
    
 
