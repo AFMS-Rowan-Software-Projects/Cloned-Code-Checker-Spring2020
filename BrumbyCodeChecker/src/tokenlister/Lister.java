@@ -1,24 +1,32 @@
 package tokenlister;
-import java.util.*;
+import java.util.ArrayList;
+import java.io.*;
 import node.*;
+import lexer.*;
+import java.nio.charset.*;
 
 
 
 public class Lister {
-	Scanner scnr = new Scanner;
-	public List<Token> tokens = new ArrayList<Token>();
+	private Lexer lex;
+	public ArrayList<Token> tokens;
 
-	public static void main(String[] args){
-		while(scnr.hasNext())
-			AddtoList(scnr.next());
+	public Lister(){
 	}
 	
-	public void AddToList(Token sablecctokens) {
-		
-		tokens.add(sablecctokens);	
+	public ArrayList<Token> AddToList(String a) {
+		InputStream StrStream = new ByteArrayInputStream(a.getBytes(Charset.forName("UTF-8")));
+		lex = new Lexer
+				(new PushbackReader
+				((Reader) StrStream, 1024)); //cant cast from inputstream to reader.
+		tokens = new ArrayList<Token>();
+		Token T = lex.next();
+		while (!(T instanceof EOF)) {
+			tokens.add(lex.next());
+		}
+		return tokens;
 	} 
 	
-	public List<Token> GetList() {	return tokens;	}
 	
 	
 }
