@@ -67,6 +67,30 @@ public class AnalysisAdapter implements Analysis
             this.out.remove(node);
         }
     }
+	
+	 @Override
+    public void caseTLBrace(TLBrace node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTRBrace(TRBrace node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTLParen(TLParen node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTRParen(TRParen node)
+    {
+        defaultCase(node);
+    }	
 
     @Override
     public void caseTKeyword(TKeyword node)

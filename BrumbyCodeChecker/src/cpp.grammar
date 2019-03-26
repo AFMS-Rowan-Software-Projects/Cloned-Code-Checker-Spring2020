@@ -1,3 +1,5 @@
+Package lexing;
+
 Helpers
 ascii_character     = [0..0xff];
   ascii_small         = ['a'..'z'];
@@ -37,7 +39,8 @@ ascii_character     = [0..0xff];
   single_character    = [input_character - [''' + '\']];
   wide_single_character = [uni_input_character - [''' + '\']];
 
-  octal_escape        = '\' (octal_digit | octal_digit octal_digit | octal_digit octal_digit octal_digit);
+  octal_escape        = '\' (octal_digit | octal_digit octal_digit | octal_digit octal_digit
+octal_digit);
   hex_escape          = '\' ('x' | 'X') (hex_digit | hex_digit hex_digit);
   unicode_escape      = '\' ('u' | 'U') (
                           hex_digit |
@@ -45,7 +48,8 @@ ascii_character     = [0..0xff];
                           hex_digit hex_digit hex_digit |
                           hex_digit hex_digit hex_digit hex_digit );
 
-  escape_sequence     = '\n' | '\t' | '\v' | '\b' | '\r' | '\f' | '\a' | '\"' | '\' ''' | '\\' |
+  escape_sequence     = '\n' | '\t' | '\v' | '\b' | '\r' | '\f' | '\a' | '\"' | '\' ''' | '\\
+' |
                           octal_escape | hex_escape | unicode_escape;
 
 string_character    = [input_character - ['"' + '\']] | escape_sequence;
@@ -53,6 +57,11 @@ wide_string_character = [uni_input_character - ['"' + '\']] | escape_sequence;
 
 
 Tokens
+
+l_brace = '{';
+r_brace = '}';
+l_paren = '(';
+r_paren = ')';
 
 keyword = 'abstract' | 'any' | 'attribute' | 'boolean' | 'case' |
                 'char' | 'const' | 'context' | 'custom' | 'default' |
@@ -78,3 +87,4 @@ blank,
   traditional_comment,
   documentation_comment,
   end_of_line_comment;
+
