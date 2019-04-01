@@ -11,7 +11,7 @@ public interface Analysis extends Switch
     Object getOut(Node node);
     void setOut(Node node, Object o);
 
-	void caseTLBrace(TLBrace node);
+    void caseTLBrace(TLBrace node);
     void caseTRBrace(TRBrace node);
     void caseTLParen(TLParen node);
     void caseTRParen(TRParen node);

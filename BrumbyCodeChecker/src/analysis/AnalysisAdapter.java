@@ -67,8 +67,8 @@ public class AnalysisAdapter implements Analysis
             this.out.remove(node);
         }
     }
-	
-	 @Override
+
+    @Override
     public void caseTLBrace(TLBrace node)
     {
         defaultCase(node);
@@ -90,7 +90,7 @@ public class AnalysisAdapter implements Analysis
     public void caseTRParen(TRParen node)
     {
         defaultCase(node);
-    }	
+    }
 
     @Override
     public void caseTKeyword(TKeyword node)
