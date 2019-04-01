@@ -1,5 +1,3 @@
-Package lexing;
-
 Helpers
 ascii_character     = [0..0xff];
   ascii_small         = ['a'..'z'];
@@ -48,8 +46,7 @@ octal_digit);
                           hex_digit hex_digit hex_digit |
                           hex_digit hex_digit hex_digit hex_digit );
 
-  escape_sequence     = '\n' | '\t' | '\v' | '\b' | '\r' | '\f' | '\a' | '\"' | '\' ''' | '\\
-' |
+  escape_sequence     = '\n' | '\t' | '\v' | '\b' | '\r' | '\f' | '\a' | '\"' | '\' ''' | '\\' |
                           octal_escape | hex_escape | unicode_escape;
 
 string_character    = [input_character - ['"' + '\']] | escape_sequence;
