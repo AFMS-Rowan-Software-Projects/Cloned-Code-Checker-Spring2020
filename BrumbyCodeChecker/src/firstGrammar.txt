@@ -1,3 +1,5 @@
+Package lexing;
+
 Helpers
 ascii_character     = [0..0xff];
   ascii_small         = ['a'..'z'];
@@ -56,6 +58,11 @@ wide_string_character = [uni_input_character - ['"' + '\']] | escape_sequence;
 
 Tokens
 
+l_brace = '{';
+r_brace = '}';
+l_paren = '(';
+r_paren = ')';
+
 keyword = 'abstract' | 'any' | 'attribute' | 'boolean' | 'case' |
                 'char' | 'const' | 'context' | 'custom' | 'default' |
                 'double' | 'enum' | 'exception' | 'factory' |
@@ -80,3 +87,4 @@ blank,
   traditional_comment,
   documentation_comment,
   end_of_line_comment;
+
