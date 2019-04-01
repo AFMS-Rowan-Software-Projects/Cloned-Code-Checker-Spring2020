@@ -1,6 +1,6 @@
-package lexing.node;
+package node;
 
-import lexing.analysis.*;
+import analysis.*;
 
 @SuppressWarnings("nls")
 public final class TLParen extends Token
