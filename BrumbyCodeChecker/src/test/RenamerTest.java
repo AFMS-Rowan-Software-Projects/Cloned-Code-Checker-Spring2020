@@ -3,17 +3,31 @@ package test;
 import java.util.ArrayList;
 import org.junit.*;
 import brumby.Renamer;
+import fileIO.CFilesReader;
 import node.Token;
+import tokenlister.Lister;
 
 public class RenamerTest {
 
 	private Renamer renamer;
-	private ArrayList<Token> tokens;
 	
 	@Test
 	public void testParseFile()
 	{
-		renamer = new Renamer(tokens);
-		
+		CFilesReader cfr = new CFilesReader();
+		String testFile = cfr.readFile("src/cpp_data/coins.txt");
+		Lister list = new Lister();
+		ArrayList<Token> testFileTokens = list.AddToList(testFile);
+		renamer = new Renamer(testFileTokens);
+		renamer.parseFile();
+		printList(renamer.getTokens());
+	}
+	
+	public void printList(ArrayList<Token> tokens)
+	{
+		for(int i=0; i<tokens.size();i++)
+		{
+			System.out.println(tokens.get(i));
+		}
 	}
 }

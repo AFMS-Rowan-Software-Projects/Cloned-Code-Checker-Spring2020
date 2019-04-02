@@ -32,4 +32,14 @@ public class Renamer {
 			}	
 		}
 	}
+	
+	public ArrayList<Token> getTokens()
+	{
+		return tokens;
+	}
+	
+	public HashMap<Token,String> getDictionary()
+	{
+		return dictionary;
+	}
 }
