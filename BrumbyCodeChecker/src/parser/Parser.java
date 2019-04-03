@@ -67,5 +67,19 @@ public class Parser{
          }
       }
    }*/
+   
+   //Takes in an array of tokens with a start and end point and returns a smaller array between those two points
+   public ArrayList<Token> subarray (ArrayList<Token> rec, int start, int end){
+       int s = start;
+       int e = end;
+       ArrayList<Token> bleh = new ArrayList<Token>();
+   
+       for(int i =s; i<=e; i++)
+       {
+           bleh.add(rec.get(i));
+       }
+
+      return bleh;
+   }
 
 }
