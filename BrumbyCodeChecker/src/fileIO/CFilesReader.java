@@ -46,6 +46,12 @@ public class CFilesReader {
 			} 
 		} 
 		
+		try {
+			buf.close();
+			inStream.close();
+		} catch (IOException e) {
+			LOGGER.info("Could not close stream. IOException caught.");
+		}
 		String fileAsString = sb.toString(); 
 		return fileAsString;
 	}
