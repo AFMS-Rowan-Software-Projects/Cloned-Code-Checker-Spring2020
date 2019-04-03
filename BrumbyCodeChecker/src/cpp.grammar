@@ -1,3 +1,5 @@
+package sablecc;
+
 Helpers
 ascii_character     = [0..0xff];
   ascii_small         = ['a'..'z'];
