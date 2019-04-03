@@ -25,7 +25,7 @@ public class Parser{
          //REMINDER: If grammar is expanded to include data types, REWRITE this section accordingly
          indices[1] = start + 3;
          //Match starting pattern of method- Identifier Identifier LParen
-         if((file.get(indices[0]) instanceof TIdentifier) && (file.get(indices[0]+1) instanceof TIdentifier) && (file.get(indices[0]+2) instanceof TLParen)){
+         if(((file.get(indices[0]) instanceof TDataType) || (file.get(indices[0]) instanceof TIdentifier)) && (file.get(indices[0]+1) instanceof TIdentifier) && (file.get(indices[0]+2) instanceof TLParen)){
           //Capture everything between ( and ) of a method
           while(!(file.get(indices[1]) instanceof TRParen) && (indices[1] < (file.size() - 3))){
             indices[1]++;
