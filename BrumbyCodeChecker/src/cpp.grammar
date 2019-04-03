@@ -105,7 +105,7 @@ keyword = 'abstract' | 'any' | 'attribute' |'case' |
 				'+' | '++' | '-' | '--' | '*' | '/' | '%' | 
 				'<' | '<=' | '>' | '>=' | '==' | '=' | '!' | '!=' |
 				'&' | '&&' | '|' | '||' | '<<' | '>>' | '~' | '^' |
-				'?:' | ',' | '.' |
+				'?:' | ',' | '.' | ';' |
 				('#pragma' | '#include' | '#ifndef' | '#define' | '#endif' ) input_character* line_terminator;
 blank = (sp | ht | ff | line_terminator)*;
 identifier = letter letter_or_digit*;
