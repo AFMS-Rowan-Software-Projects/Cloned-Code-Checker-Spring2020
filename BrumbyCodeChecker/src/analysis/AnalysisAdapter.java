@@ -69,6 +69,24 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseTTraditionalComment(TTraditionalComment node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTDocumentationComment(TDocumentationComment node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTEndOfLineComment(TEndOfLineComment node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseTLBrace(TLBrace node)
     {
         defaultCase(node);
@@ -93,6 +111,24 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
+    public void caseTDataType(TDataType node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTNumericConstant(TNumericConstant node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTTextLiteral(TTextLiteral node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
     public void caseTKeyword(TKeyword node)
     {
         defaultCase(node);
@@ -106,24 +142,6 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseTIdentifier(TIdentifier node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTTraditionalComment(TTraditionalComment node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTDocumentationComment(TDocumentationComment node)
-    {
-        defaultCase(node);
-    }
-
-    @Override
-    public void caseTEndOfLineComment(TEndOfLineComment node)
     {
         defaultCase(node);
     }

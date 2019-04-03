@@ -54,29 +54,60 @@ wide_string_character = [uni_input_character - ['"' + '\']] | escape_sequence;
 
 
 Tokens
+traditional_comment = '/*' not_star+ '*'+ (not_star_not_slash not_star* '*'+)* '/';
+documentation_comment =    '/**' '*'* (not_star_not_slash not_star* '*'+)* '/';
+end_of_line_comment = '//' input_character* line_terminator?;
+
 
 l_brace = '{';
 r_brace = '}';
 l_paren = '(';
 r_paren = ')';
 
-keyword = 'abstract' | 'any' | 'attribute' | 'boolean' | 'case' |
-                'char' | 'const' | 'context' | 'custom' | 'default' |
-                'double' | 'enum' | 'exception' | 'factory' |
-                'false' | 'fixed' | 'float' | 'in' | 'inout' |
-                'interface' | 'long' | 'module' | 'native' |
+data_type = 'boolean' | 'bool' | 'char' | 'double'  | 'float' | 'string'
+| 'void' | 'wchar' | 'wstring' | 'int' | 'wchar_t';
+
+numeric_constant = decimal_numeral |
+                          hex_numeral |
+                          octal_numeral |
+      digit+ '.' digit* fixed_type_suffix |
+      '.' digit+ fixed_type_suffix |
+      digit+ fixed_type_suffix |
+      digit+ '.' digit* exponent_part? |
+      '.' digit+ exponent_part? |
+      digit+ exponent_part;
+	  
+text_literal = ''' (single_character | escape_sequence) ''' |
+	'L' ''' (wide_single_character | escape_sequence) '''
+  |'"' string_character* '"' |'L' '"' wide_string_character* '"';	  
+  
+keyword = 'abstract' | 'any' | 'attribute' |'case' |
+                 'const' | 'context' | 'custom' | 'default' |
+                'exception' | 'factory' | 'enum' |
+                'false' | 'fixed' | 'in' | 'inout' |
+                'interface' | 'module' | 'native' |
                 'octet' | 'object' | 'oneway' | 'out' | 'private' |
                 'public' | 'raises' | 'readonly' | 'sequence' |
-                'short' | 'string' | 'struct' | 'supports' |
+                'struct' | 'supports' | 'signed' |
                 'switch' | 'true' | 'truncatable' | 'typedef' |
-                'union' | 'unsigned' | 'valuebase' | 'valuetype' |
-                'void' | 'wchar' | 'wstring';
+                'union' | 'unsigned' | 'valuebase' | 'valuetype' | 'long' | 'short' |
+				'cout' | 'namespace' | 'using' | 'endl' |
+				'asm' | 'else' | 'new' | 'this' | 'auto' | 'operator' |
+				'throw' | 'explicit' | 'break' | 'export' | 'protected' |
+				'try' | 'extern' | 'catch' | 'register' | 'typeid' |
+				'reinterpret_cast' | 'typename' | 'class' | 'for' |
+				'return' | 'union' | 'friend' | 'const_cast' | 'goto' |
+				'continue' | 'if' | 'sizeof' | 'virtual' | 'inline' | 'static' |
+				'delete' | 'static_cast' | 'volatile' | 'do' | 'mutable' |
+				'while' | 'dynamic_cast' | 'template' | 
+				'+' | '++' | '-' | '--' | '*' | '/' | '%' | 
+				'<' | '<=' | '>' | '>=' | '==' | '=' | '!' | '!=' |
+				'&' | '&&' | '|' | '||' | '<<' | '>>' | '~' | '^' |
+				'?:' | ',' | '.' |
+				('#pragma' | '#include' | '#ifndef' | '#define' | '#endif' ) input_character* line_terminator;
 blank = (sp | ht | ff | line_terminator)*;
 identifier = letter letter_or_digit*;
 
-traditional_comment = '/*' not_star+ '*'+ (not_star_not_slash not_star* '*'+)* '/';
-documentation_comment =    '/**' '*'* (not_star_not_slash not_star* '*'+)* '/';
-end_of_line_comment = '//' input_character* line_terminator?;
 
 
 Ignored Tokens
