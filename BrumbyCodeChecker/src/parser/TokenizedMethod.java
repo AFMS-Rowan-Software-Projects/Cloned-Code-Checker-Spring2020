@@ -6,38 +6,28 @@ import node.Token;
 
 public class TokenizedMethod {
 	private String fileLocation;
-	private ArrayList<Token> constructorTokens;
-	private int[] duplicateLocations;
-	private int numDuplicates;
-	public ArrayList<Token> tokens;
+	private ArrayList<Token> tokens;
+	private boolean hasDuplicate;
 	
-	public TokenizedMethod(String filePath, ArrayList<Token> token) {
+	public TokenizedMethod(String filePath, ArrayList<Token> tokenlist) {
 		fileLocation = filePath;
-		constructorTokens = token;
-		duplicateLocations = new int[3];	}
-
-public String getFileLocation() {
-	return fileLocation;
-}
-
-public int getNumDuplicates() {
-	return numDuplicates;
-}
-
-public int[] getDuplicateLocations() {
-	return duplicateLocations;
-}
-
-public void addDuplicateLocation(int indexOfDuplicate) {
-	if(numDuplicates == duplicateLocations.length) {
-		int[] tempArray = duplicateLocations;
-		duplicateLocations = new int[(numDuplicates+3)];
-		for(int i = 0; i < numDuplicates; i++) {
-			duplicateLocations[i] = tempArray[i];
-		}
+		tokens = tokenlist;
+		hasDuplicate = false;
 	}
-	duplicateLocations[numDuplicates] = indexOfDuplicate;
-	numDuplicates++;
-}
+	
+	public void addDuplicate(String filePath) {
+		hasDuplicate = true;
+		fileLocation += "\n" + filePath;
+		return;
+	}
+	
+	public ArrayList<Token> getTokens(){
+		return tokens;
+	}
+	
+	public String toString() {
+		return fileLocation;
+	}
+
 
 }

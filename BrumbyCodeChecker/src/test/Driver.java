@@ -1,4 +1,4 @@
-package driver;
+package test;
 import fileIO.CFilesReader;
 import java.io.File;
 import java.util.ArrayList;
