@@ -28,6 +28,10 @@ public class TokenizedMethod {
 	public String toString() {
 		return fileLocation;
 	}
+	
+	public boolean hasDuplicate() {
+		return hasDuplicate;
+	}
 
 
 }

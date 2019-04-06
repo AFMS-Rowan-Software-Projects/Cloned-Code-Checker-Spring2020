@@ -23,12 +23,12 @@ public class Renamer {
 		{
 			if (token instanceof TIdentifier)
 			{
-				if (!dictionary.containsKey(token))
+				if (!dictionary.containsKey(token.getText()))
 				{
 					dictionary.put(token, "id" + counter);
 					counter++;
 				}
-				token.setText(dictionary.get(token));
+				token.setText(dictionary.get(token.getText()));
 			}	
 		}
 	}

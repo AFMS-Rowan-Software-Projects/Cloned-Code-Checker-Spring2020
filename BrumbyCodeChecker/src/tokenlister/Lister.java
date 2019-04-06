@@ -7,12 +7,12 @@ import lexer.*;
 
 
 public class Lister {
-	private Lexer lex;
-	public ArrayList<Token> tokens;
+	private static Lexer lex;
+	private static ArrayList<Token> tokens;
 
 	
 
-public ArrayList<Token> AddToList(String a) {
+public static ArrayList<Token> ConvertToList(String a) {
 		//InputStream StrStream = new 	ByteArrayInputStream(a.getBytes(Charset.forName("UTF-8")));
 		
 		lex = new Lexer
