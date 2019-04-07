@@ -3,8 +3,7 @@ package brumby;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import node.TIdentifier;
-import node.Token;
+import sablecc.node.*;
 
 public class Renamer {
 

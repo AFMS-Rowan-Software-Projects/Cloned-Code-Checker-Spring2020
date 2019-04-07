@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import org.junit.*;
 import brumby.Renamer;
 import fileIO.CFilesReader;
-import node.Token;
+import sablecc.node.Token;
 import tokenlister.Lister;
 
 public class RenamerTest {
@@ -17,7 +17,7 @@ public class RenamerTest {
 		CFilesReader cfr = new CFilesReader();
 		String testFile = cfr.readFile("src/cpp_data/coins.txt");
 		Lister list = new Lister();
-		ArrayList<Token> testFileTokens = list.AddToList(testFile);
+		ArrayList<Token> testFileTokens = list.ConvertToList(testFile);
 		renamer = new Renamer(testFileTokens);
 		renamer.parseFile();
 		printList(renamer.getTokens());

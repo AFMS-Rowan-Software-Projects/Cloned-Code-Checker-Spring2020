@@ -1,8 +1,8 @@
 package tokenlister;
 import java.util.ArrayList;
 import java.io.*;
-import node.*;
-import lexer.*;
+import sablecc.node.*;
+import sablecc.lexer.*;
 
 
 

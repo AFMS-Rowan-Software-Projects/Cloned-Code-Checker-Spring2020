@@ -2,7 +2,7 @@ package parser;
 
 import java.util.ArrayList;
 
-import node.Token;
+import sablecc.node.Token;
 
 public class TokenizedMethod {
 	private String fileLocation;

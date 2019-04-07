@@ -1,5 +1,5 @@
 package parser;
-import node.*;
+import sablecc.node.*;
 import java.util.ArrayList;
 public class Parser{
    

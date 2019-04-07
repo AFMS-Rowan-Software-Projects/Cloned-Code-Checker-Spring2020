@@ -1,4 +1,4 @@
-package sablecc;
+Package sablecc;
 
 Helpers
 ascii_character     = [0..0xff];
@@ -110,6 +110,7 @@ keyword = 'abstract' | 'any' | 'attribute' |'case' |
 blank = (sp | ht | ff | line_terminator)*;
 identifier = letter letter_or_digit*;
 
+unknown = unicode_character;
 
 
 Ignored Tokens

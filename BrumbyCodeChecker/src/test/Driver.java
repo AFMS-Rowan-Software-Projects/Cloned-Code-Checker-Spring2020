@@ -2,9 +2,9 @@ package test;
 import fileIO.CFilesReader;
 import java.io.File;
 import java.util.ArrayList;
-import analysis.*;
-import lexer.*;
-import node.*;
+import sablecc.analysis.*;
+import sablecc.lexer.*;
+import sablecc.node.*;
 import parser.*;
 
 public class Driver{
