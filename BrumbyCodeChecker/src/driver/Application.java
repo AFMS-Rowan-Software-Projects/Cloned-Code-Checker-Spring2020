@@ -52,7 +52,7 @@ public class Application {
 		}
 		//All directories processed and all methods added
 		for(TokenizedMethod method : methods) {
-			if(method.hasDuplicate()) {
+			if(method.hasDuplicate()) {//TODO change to file output
 				System.out.println("Duplicate found in the following files:");
 				System.out.println(method.toString());
 			}
