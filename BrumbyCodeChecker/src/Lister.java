@@ -1,19 +1,21 @@
 
 import java.util.ArrayList;
 import java.io.*;
-import node.*;
-import lexer.*;
+import sablecc.lexer.Lexer;
+import sablecc.lexer.LexerException;
+import sablecc.node.EOF;
+import sablecc.node.Token;
 
 
 
 public class Lister {
-	private Lexer lex;
-	public ArrayList<Token> tokens;
+	private static Lexer lex;
+	public static ArrayList<Token> tokens;
 
 	public Lister(){
 	}
 	
-	public ArrayList<Token> AddToList(String a) {
+	public static ArrayList<Token> AddToList(String a) {
 		//InputStream StrStream = new ByteArrayInputStream(a.getBytes(Charset.forName("UTF-8")));
 		
 		lex = new Lexer
