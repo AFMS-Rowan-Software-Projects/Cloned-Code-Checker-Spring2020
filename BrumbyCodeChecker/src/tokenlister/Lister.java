@@ -23,7 +23,8 @@ public static ArrayList<Token> ConvertToList(String a) {
 		try {
 			T = lex.next();
 			while (!(T instanceof EOF)) {
-				tokens.add(lex.next());
+				tokens.add(T);
+				T = lex.next();
 			}
 		}
 		catch (LexerException le)

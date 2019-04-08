@@ -23,12 +23,15 @@ public class Application {
 			//directory_contents = directoryplaceholder(args[i]);
 			System.out.println(directory_contents.size());
 			for(String file : directory_contents) {
-				System.out.print(file);
+				System.out.println(file);
 				current_file = CFilesReader.readFile(file);//Take filepath and load it into a String
+				System.out.println("File loaded in");
 				file_tokens = Lister.ConvertToList(current_file);
+				System.out.println("File Tokenized");
 				method_indices[0] = 0;
 				while(method_indices[0] != -1) {
 					method_indices = Parser.findMethod(file_tokens, method_indices[0]);
+					System.out.println("Found method");
 					if(method_indices[0] == -1) {
 						break;
 					}else {
