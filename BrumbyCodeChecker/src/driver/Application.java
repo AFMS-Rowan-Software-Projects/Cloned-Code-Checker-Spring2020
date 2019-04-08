@@ -26,7 +26,11 @@ public class Application {
 				System.out.println(file);
 				current_file = CFilesReader.readFile(file);//Take filepath and load it into a String
 				System.out.println("File loaded in");
-				file_tokens = Lister.ConvertToList(current_file);
+				//call sanitize method below
+				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file));
+				for(int k = 0; k < file_tokens.size(); k++) {
+					System.out.println(k + " " +file_tokens.get(k).getClass() + ": " + file_tokens.get(k).getText() );
+				}
 				System.out.println("File Tokenized");
 				method_indices[0] = 0;
 				while(method_indices[0] != -1) {
@@ -36,6 +40,7 @@ public class Application {
 						break;
 					}else {
 						//Remove method chunk and rename identifiers accordingly
+						System.out.println("Method indices: " + method_indices[0] + ", " + method_indices[1]);
 						rename = new Renamer(Parser.subarray(file_tokens, method_indices[0], method_indices[1]));
 						method_tokens = rename.getTokens();
 						isDuplicate = false;
@@ -49,6 +54,10 @@ public class Application {
 							}
 						}
 						if(!isDuplicate) {
+							System.out.println("method tokens");
+							for(Token T : method_tokens) {
+								System.out.println(T.getText());
+							}
 							methods.add(new TokenizedMethod(file+":"+method_tokens.get(1).getText(), method_tokens));
 						}
 					}

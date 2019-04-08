@@ -58,15 +58,19 @@ public class Parser{
    }
    
    
-   /*public static ArrayList<Token> sanitize(ArrayList<Token> tlist){
+   public static ArrayList<Token> sanitize(ArrayList<Token> t_large){
    //NOTE: this method may become unnecessary if Ignored Tokens aren't produced by the Scanner
-      for(int i = 0; i < tlist.length(); i++){
-         if((tlist.get(i) instanceof TWhitespace) || (tlist.get(i) instanceof TComment)){
+	   ArrayList<Token> tlist = (ArrayList<Token>) t_large.clone();
+      for(int i = 0; i < tlist.size(); i++){
+         if((tlist.get(i) instanceof InvalidToken) || (tlist.get(i) instanceof TBlank)
+        		 || (tlist.get(i) instanceof TDocumentationComment) || (tlist.get(i) instanceof TEndOfLineComment)
+        		 || (tlist.get(i) instanceof TTraditionalComment) || (tlist.get(i) instanceof TUnknown)){
             tlist.remove(i);
             i--;//Reposition the iterator correctly
          }
       }
-   }*/
+      return tlist;
+   }
    
    //Takes in an array of tokens with a start and end point and returns a smaller array between those two points
    public static ArrayList<Token> subarray (ArrayList<Token> rec, int start, int end){
