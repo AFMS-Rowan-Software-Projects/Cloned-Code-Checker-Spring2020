@@ -19,9 +19,11 @@ public class Application {
 		boolean isDuplicate;
 		Renamer rename;
 		for(int i = 0; i < args.length; i++) {
-			//directory_contents = SearchFile.searchForFile(args[i]);//ANDREW AND KEVIN- your code replaces this line
-			directory_contents = directoryplaceholder(args[i]);
+			directory_contents = SearchFile.searchForFile(args[i]);//ANDREW AND KEVIN- your code replaces this line
+			//directory_contents = directoryplaceholder(args[i]);
+			System.out.println(directory_contents.size());
 			for(String file : directory_contents) {
+				System.out.print(file);
 				current_file = CFilesReader.readFile(file);//Take filepath and load it into a String
 				file_tokens = Lister.ConvertToList(current_file);
 				method_indices[0] = 0;

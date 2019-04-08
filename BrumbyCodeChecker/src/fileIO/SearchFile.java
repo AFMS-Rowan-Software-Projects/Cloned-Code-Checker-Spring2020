@@ -1,7 +1,7 @@
 package fileIO;
 
 /**
- * This class searches through the provided directories and adds 
+ * This class searches through the provided directories and adds .cpp files to the 'files' ArrayList
  */
 
 import java.io.File;
@@ -9,16 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFile {
-	private String fileSearch;
-	private ArrayList<String> files = new ArrayList<String>();
+	private static ArrayList<String> files = new ArrayList<String>();
 
+	/**
+	 * Constructor for SearchFile
+	 */
+	//public SearchFile(String fileToSearch) {
+		//SearchFile.fileToSearch = fileToSearch;
+	//}
+	
 	/**
 	 * @param file file to search for within the directories
 	 * @return
 	 */
-	public ArrayList<String> searchForFile(String file) {
-		SearchFile searchFile = new SearchFile();
-		searchFile.searchDirectory(new File("Directory to search"), file);
+	public static ArrayList<String> searchForFile(String file) {
+		files.clear();
+		searchDirectory(new File(file), file);
 		return files;
 	}
 
@@ -26,8 +32,8 @@ public class SearchFile {
 	 * @param directory  directory to search
 	 * @param fileSearch file to search for in each directory
 	 */
-	public void searchDirectory(File directory, String fileSearch) {
-		setFiletoSearch(fileSearch);
+	public static void searchDirectory(File directory, String fileToSearch) {
+		//setFiletoSearch(fileToSearch);
 		if (directory.isDirectory())
 			search(directory);
 		else
@@ -37,7 +43,7 @@ public class SearchFile {
 	/**
 	 * @param file file currently searching for
 	 */
-	private void search(File file) {
+	private static void search(File file) {
 		if (file.isDirectory())
 			if (file.canRead())
 				for (File temp : file.listFiles())
@@ -50,12 +56,10 @@ public class SearchFile {
 	/**
 	 * @param fileSearch file to search
 	 */
-	public void setFiletoSearch(String fileSearch) {
-		this.fileSearch = fileSearch;
-	}
+	//public static void setFiletoSearch(String fileToSearch) {
+		//SearchFile.fileToSearch = fileToSearch;
+	//}
 
-	public String getFileToSearch() {
-		return fileSearch;
-	}
+	
 
 }
