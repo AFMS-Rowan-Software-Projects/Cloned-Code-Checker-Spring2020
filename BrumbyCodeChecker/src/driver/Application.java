@@ -29,9 +29,9 @@ public class Application {
 				System.out.println("File loaded in");
 				//call sanitize method below
 				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file));
-				for(int k = 0; k < file_tokens.size(); k++) {
+				/*for(int k = 0; k < file_tokens.size(); k++) {
 					System.out.println(k + " " +file_tokens.get(k).getClass() + ": " + file_tokens.get(k).getText() );
-				}
+				}*/
 				System.out.println("File Tokenized");
 				method_indices[0] = 0;
 				while(method_indices[0] != -1) {
@@ -41,13 +41,13 @@ public class Application {
 						break;
 					}else {
 						//Remove method chunk and rename identifiers accordingly
-						System.out.println("Method indices: " + method_indices[0] + ", " + method_indices[1]);
+						//System.out.println("Method indices: " + method_indices[0] + ", " + method_indices[1]);
 						rename = new Renamer(Parser.subarray(file_tokens, method_indices[0], method_indices[1]));
 						qualified_name = file + ":" + rename.getTokens().get(1).getText();
 						rename.parseFile();
 						method_tokens = rename.getTokens();
-						System.out.println("method_tokens size: " + method_tokens.size());
-						System.out.println("methods size: " + methods.size());
+						//System.out.println("method_tokens size: " + method_tokens.size());
+						//System.out.println("methods size: " + methods.size());
 						isDuplicate = false;
 						for(TokenizedMethod method : methods) {
 							if(Parser.similarity(method.getTokens(), method_tokens) == 1) {
