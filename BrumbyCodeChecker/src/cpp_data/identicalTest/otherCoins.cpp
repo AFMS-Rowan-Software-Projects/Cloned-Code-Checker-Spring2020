@@ -22,7 +22,9 @@ int main()
     const int CENTS_PER_DIME = 10;
     const int CENTS_PER_NICKEL = 5;
     const int CENTS_PER_PENNY = 1;
-
+/*
+DIFFERENT COMMENT */
+//OTHER DIFFERENT COMMENT
     //Ask all the questions and read in answers
     cout << "Enter number of quarters: ";
     cin >> quarters;
