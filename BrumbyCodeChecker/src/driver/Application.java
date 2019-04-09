@@ -34,7 +34,7 @@ public class Application {
 				System.out.println("File Tokenized");
 				method_indices[0] = 0;
 				while(method_indices[0] != -1) {
-					method_indices = Parser.findMethod(file_tokens, method_indices[0]);
+					method_indices = Parser.findMethod(file_tokens, method_indices[1]);
 					System.out.println("Found method");
 					if(method_indices[0] == -1) {
 						break;
