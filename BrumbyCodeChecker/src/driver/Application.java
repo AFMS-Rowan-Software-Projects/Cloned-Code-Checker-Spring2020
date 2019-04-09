@@ -18,6 +18,7 @@ public class Application {
 		int[] method_indices = new int[2];
 		boolean isDuplicate;
 		Renamer rename;
+		String qualified_name;
 		for(int i = 0; i < args.length; i++) {
 			directory_contents = SearchFile.searchForFile(args[i]);//ANDREW AND KEVIN- your code replaces this line
 			//directory_contents = directoryplaceholder(args[i]);
@@ -42,23 +43,27 @@ public class Application {
 						//Remove method chunk and rename identifiers accordingly
 						System.out.println("Method indices: " + method_indices[0] + ", " + method_indices[1]);
 						rename = new Renamer(Parser.subarray(file_tokens, method_indices[0], method_indices[1]));
+						qualified_name = file + ":" + rename.getTokens().get(1).getText();
+						rename.parseFile();
 						method_tokens = rename.getTokens();
+						System.out.println("method_tokens size: " + method_tokens.size());
+						System.out.println("methods size: " + methods.size());
 						isDuplicate = false;
 						for(TokenizedMethod method : methods) {
 							if(Parser.similarity(method.getTokens(), method_tokens) == 1) {
 								//Duplicate method found
 								isDuplicate = true;
 								//Record location of this duplicate, but throw away its tokenized representation
-								method.addDuplicate(file + ":" + method_tokens.get(1).getText());
+								method.addDuplicate(qualified_name);
 								break;
 							}
 						}
 						if(!isDuplicate) {
-							System.out.println("method tokens");
+							System.out.println("method tokens being added");
 							for(Token T : method_tokens) {
 								System.out.println(T.getText());
 							}
-							methods.add(new TokenizedMethod(file+":"+method_tokens.get(1).getText(), method_tokens));
+							methods.add(new TokenizedMethod(qualified_name, method_tokens));
 						}
 					}
 				}

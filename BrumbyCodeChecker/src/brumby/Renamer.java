@@ -7,7 +7,7 @@ import sablecc.node.*;
 
 public class Renamer {
 
-	private HashMap<Token, String> dictionary;
+	private HashMap<String, String> dictionary;
 	private ArrayList<Token> tokens;
 	
 	public Renamer(ArrayList<Token> tokens)
@@ -24,7 +24,7 @@ public class Renamer {
 			{
 				if (!dictionary.containsKey(token.getText()))
 				{
-					dictionary.put(token, "id" + counter);
+					dictionary.put(token.getText(), "id" + counter);
 					counter++;
 				}
 				token.setText(dictionary.get(token.getText()));
@@ -37,7 +37,7 @@ public class Renamer {
 		return tokens;
 	}
 	
-	public HashMap<Token,String> getDictionary()
+	public HashMap<String,String> getDictionary()
 	{
 		return dictionary;
 	}
