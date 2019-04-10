@@ -22,21 +22,21 @@ public class Application {
 		for(int i = 0; i < args.length; i++) {
 			directory_contents = SearchFile.searchForFile(args[i]);//ANDREW AND KEVIN- your code replaces this line
 			//directory_contents = directoryplaceholder(args[i]);
-			System.out.println(directory_contents.size());
+			//System.out.println("Files: " + directory_contents.size());
 			for(String file : directory_contents) {
-				System.out.println(file);
+				//System.out.println(file);
 				current_file = CFilesReader.readFile(file);//Take filepath and load it into a String
-				System.out.println("File loaded in");
+				//System.out.println("File loaded in");
 				//call sanitize method below
 				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file));
 				/*for(int k = 0; k < file_tokens.size(); k++) {
 					System.out.println(k + " " +file_tokens.get(k).getClass() + ": " + file_tokens.get(k).getText() );
 				}*/
-				System.out.println("File Tokenized");
+				//System.out.println("File Tokenized");
 				method_indices[0] = 0;
 				while(method_indices[0] != -1) {
 					method_indices = Parser.findMethod(file_tokens, method_indices[1]);
-					System.out.println("Found method");
+					//System.out.println("Found method");
 					if(method_indices[0] == -1) {
 						break;
 					}else {
@@ -59,10 +59,10 @@ public class Application {
 							}
 						}
 						if(!isDuplicate) {
-							System.out.println("method tokens being added");
-							for(Token T : method_tokens) {
+							//System.out.println("method tokens being added");
+							/*for(Token T : method_tokens) {
 								System.out.println(T.getText());
-							}
+							}*/
 							methods.add(new TokenizedMethod(qualified_name, method_tokens));
 						}
 					}
@@ -78,7 +78,4 @@ public class Application {
 		}
 	}
 	
-	public static ArrayList<String> directoryplaceholder(String s){
-		return null;
-	}
 }

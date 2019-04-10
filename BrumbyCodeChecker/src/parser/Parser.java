@@ -28,11 +28,11 @@ public class Parser{
          //System.out.println("Indices " + indices[0] + " " + indices[1]);
          if(((file.get(indices[0]) instanceof TDataType) || (file.get(indices[0]) instanceof TIdentifier)) && (file.get(indices[0]+1) instanceof TIdentifier) && (file.get(indices[0]+2) instanceof TLParen)){
           //Capture everything between ( and ) of a method
-        	 System.out.println("found signature: " + indices[0] + " " + indices[1]);
+        	 //System.out.println("found signature: " + indices[0] + " " + indices[1]);
           while(!(file.get(indices[1]) instanceof TRParen) && (indices[1] < (file.size() - 3))){
             indices[1]++;
           }
-          System.out.println("RParen: " + indices[1]);
+          //System.out.println("RParen: " + indices[1]);
           indices[1]++;
           if(indices[1] > (file.size() - 2)){//EOF reached
             indices[0] = file.size();//Record that method was not found
