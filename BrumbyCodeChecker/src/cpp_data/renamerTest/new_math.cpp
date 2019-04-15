@@ -13,7 +13,7 @@ int blue_addition (int first, int second)
 {
   int blue;
   blue = first + second;
-  return r;
+  return blue;
 }
 
 void duplicate_no_address (int a, int b, int c)//This method does not work with addresses!

@@ -60,7 +60,8 @@ public class Application {
 						}
 						if(!isDuplicate) {
 							//System.out.println("method tokens being added");
-							/*for(Token T : method_tokens) {
+							/*System.out.println(qualified_name);
+							for(Token T : method_tokens) {
 								System.out.println(T.getText());
 							}*/
 							methods.add(new TokenizedMethod(qualified_name, method_tokens));
