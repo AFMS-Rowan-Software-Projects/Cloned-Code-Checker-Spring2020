@@ -43,7 +43,7 @@ public class Application {
 						//Remove method chunk and rename identifiers accordingly
 						//System.out.println("Method indices: " + method_indices[0] + ", " + method_indices[1]);
 						rename = new Renamer(Parser.subarray(file_tokens, method_indices[0], method_indices[1]));
-						qualified_name = file + ":" + rename.getTokens().get(1).getText();
+						qualified_name = file + ":" + rename.getTokens().get(1).getText() + ":" + rename.getTokens().get(1).getLine();
 						rename.parseFile();
 						method_tokens = rename.getTokens();
 						//System.out.println("method_tokens size: " + method_tokens.size());
