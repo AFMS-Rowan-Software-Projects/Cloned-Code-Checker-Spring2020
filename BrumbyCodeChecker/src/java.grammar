@@ -67,7 +67,7 @@ l_paren = '(';
 r_paren = ')';
 
 data_type = 'boolean' | 'byte' | 'char' | 'short' | 'int' | 
-				'long' | 'float' | 'double';
+				'long' | 'float' | 'double' | 'String';
 
 numeric_constant = decimal_numeral |
                           hex_numeral |
