@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFile {
-	private static ArrayList<String> files = new ArrayList<String>();
+	private  ArrayList<String> files = new ArrayList<String>();
 
 	/**
 	 * Constructor for SearchFile
@@ -22,7 +22,7 @@ public class SearchFile {
 	 * @param file file to search for within the directories
 	 * @return
 	 */
-	public static ArrayList<String> searchForFile(String file) {
+	public  ArrayList<String> searchForFile(String file) {
 		files.clear();
 		searchDirectory(new File(file), file);
 		return files;
@@ -32,7 +32,7 @@ public class SearchFile {
 	 * @param directory  directory to search
 	 * @param fileSearch file to search for in each directory
 	 */
-	public static void searchDirectory(File directory, String fileToSearch) {
+	public  void searchDirectory(File directory, String fileToSearch) {
 		//setFiletoSearch(fileToSearch);
 		if (directory.isDirectory())
 			search(directory);
@@ -43,7 +43,7 @@ public class SearchFile {
 	/**
 	 * @param file file currently searching for
 	 */
-	private static void search(File file) {
+	private  void search(File file) {
 		if (file.isDirectory())
 			if (file.canRead())
 				for (File temp : file.listFiles())

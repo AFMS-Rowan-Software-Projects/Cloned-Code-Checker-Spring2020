@@ -16,7 +16,9 @@ public class CFilesReader {
 	
 	public static String readFile(String file)
 	{
-		InputStream inStream = null;;
+		InputStream inStream = null;
+		File directory = new File("./");
+		System.out.println(directory.getAbsolutePath());
 		try {
 			inStream = new FileInputStream(file);
 		} 

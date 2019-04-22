@@ -15,7 +15,7 @@ public class Driver{
       //Display working directory for debugging purposes
       
       //Test FileIO
-      String newFile = CFilesReader.readFile(".\\src\\cpp_data\\Coins.txt");
+      String newFile = CFilesReader.readFile(".\\src\\cpp_data\\identicalTest\\Coins.cpp");
       System.out.println(newFile);
       
       /*Insert appropriate call to Scanner*/
