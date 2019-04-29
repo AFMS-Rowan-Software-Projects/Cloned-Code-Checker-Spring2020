@@ -13,6 +13,7 @@ public class ParserTest {
 	
 	private int[] indicies = new int[2];
 	ArrayList<Token> List;
+	
 	@Test
 	public void testFindMethod() {
 		//first want to input example

@@ -7,3 +7,11 @@ The similarity method was given a single-element ArrayList to compare to an iden
 Wes Holman
 Tested similarity method with 2 identically sized ArrayLists of Tokens with different content; it successfully reported a non-identical similarity.
 
+4/15/2019 3:30 P.M.
+Christian Morris
+Intial Junit test created to test basic data for RenamerTest.
+Took a file and gave tokenized output in an array format. 
+
+4/17/2019 6:54 P.M.
+Christian Morris
+More complex data tested. Worked on all cpp test files so far. 
