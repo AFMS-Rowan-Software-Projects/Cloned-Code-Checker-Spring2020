@@ -17,6 +17,9 @@ public class Application {
 		String current_file;
 		int[] method_indices = new int[2];
 		boolean isDuplicate;
+		int totalFiles = 0;
+		int filesAffected = 0;
+		ArrayList<String> filesWithDuplicates = new ArrayList<>();
 		Renamer rename;
 		String qualified_name;
 		for(int i = 0; i < args.length - 1; i++) {
@@ -25,6 +28,7 @@ public class Application {
 			//System.out.println("Files: " + directory_contents.size());
 			for(String file : directory_contents) {
 				//System.out.println(file);
+				totalFiles++;
 				current_file = CFilesReader.readFile(file);//Take filepath and load it into a String
 				//System.out.println("File loaded in");
 				//call sanitize method below
@@ -44,6 +48,10 @@ public class Application {
 						//System.out.println("Method indices: " + method_indices[0] + ", " + method_indices[1]);
 						rename = new Renamer(Parser.subarray(file_tokens, method_indices[0], method_indices[1]));
 						qualified_name = file + ":" + rename.getTokens().get(1).getText() + ":" + rename.getTokens().get(1).getLine();
+						if (!filesWithDuplicates.contains(file))//keeps track of files with duplicates
+							{filesWithDuplicates.add(file);
+							filesAffected++;
+							}
 						rename.parseFile();
 						method_tokens = rename.getTokens();
 						//System.out.println("method_tokens size: " + method_tokens.size());
@@ -77,6 +85,8 @@ public class Application {
 				System.out.println(method.toString());
 			}
 		}
+		System.out.println("Total Files: " + totalFiles);
+		System.out.println("Affected Files: " + filesAffected);
 	}
 	
 }
