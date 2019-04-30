@@ -19,8 +19,8 @@ public class Application {
 		boolean isDuplicate;
 		Renamer rename;
 		String qualified_name;
-		for(int i = 0; i < args.length; i++) {
-			directory_contents = SearchFile.searchForFile(args[i]);//ANDREW AND KEVIN- your code replaces this line
+		for(int i = 0; i < args.length - 1; i++) {
+			directory_contents = SearchFile.searchForFile(args[i], args[args.length - 1]);//ANDREW AND KEVIN- your code replaces this line
 			//directory_contents = directoryplaceholder(args[i]);
 			//System.out.println("Files: " + directory_contents.size());
 			for(String file : directory_contents) {
@@ -73,10 +73,11 @@ public class Application {
 		//All directories processed and all methods added
 		for(TokenizedMethod method : methods) {
 			if(method.hasDuplicate()) {//TODO change to file output
-				System.out.println("Duplicate found in the following files:");
+				System.out.println("\nDuplicate found in the following files:");
 				System.out.println(method.toString());
 			}
 		}
 	}
 	
 }
+
