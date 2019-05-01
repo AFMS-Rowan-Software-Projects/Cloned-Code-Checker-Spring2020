@@ -7,7 +7,7 @@ public class TokenizedMethod {
 	private String fileLocation;
 	private ArrayList<Token> tokens;
 	private boolean hasDuplicate;
-	private int duplicates=0;
+	private int duplicates=1;
 	
 	public TokenizedMethod(String filePath, ArrayList<Token> tokenlist) {
 		fileLocation = filePath;
