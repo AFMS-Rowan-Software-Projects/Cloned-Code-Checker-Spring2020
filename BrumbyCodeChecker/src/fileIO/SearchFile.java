@@ -53,8 +53,9 @@ public class SearchFile {
 				for (File temp : file.listFiles())
 					if (temp.isDirectory())
 						search(temp, lang);
-					else if (temp.getName().substring(temp.getName().length() - 4, temp.getName().length())
-							.equals(".cpp"))
+					else if ((temp.getName().substring(temp.getName().length() - 4, temp.getName().length())
+							.equals(".cpp")) || temp.getName().substring(temp.getName().length() - 4, temp.getName().length())
+							.equals(".hpp"))
 						cppfiles.add(temp.getAbsoluteFile().toString());
 					else if (temp.getName().substring(temp.getName().length() - 5, temp.getName().length())
 							.equals(".java"))
