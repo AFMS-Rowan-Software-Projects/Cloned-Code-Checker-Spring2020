@@ -80,14 +80,17 @@ public class Application {
 			}		
 		}
 		//All directories processed and all methods added
+		int locAffected = 0;
 		for(TokenizedMethod method : methods) {
 			if(method.hasDuplicate()) {//TODO change to file output
 				System.out.println("\nDuplicate found in the following files:");
 				System.out.println(method.toString());
+				locAffected += method.linesAffected();
 			}
 		}
 		System.out.println("Total Files: " + totalFiles);
 		System.out.println("Affected Files: " + filesAffected);
+		System.out.println("Lines of code affected: " + locAffected);
 	}
 	
 }
