@@ -1,7 +1,6 @@
 package parser;
 
 import sablecc.node.Token;
-import ogn
 import java.util.ArrayList;
 
 public class TokenizedMethod {
