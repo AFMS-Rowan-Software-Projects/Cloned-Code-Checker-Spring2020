@@ -11,6 +11,7 @@ import brumby.*;
 
 public class Application {
 	public static void main(String[] args) {
+		//System.out.println("Initializing..");
 		ArrayList<String> directory_contents;
 		ArrayList<TokenizedMethod> methods = new ArrayList<TokenizedMethod>();
 		ArrayList<Token> file_tokens, method_tokens;
@@ -32,7 +33,7 @@ public class Application {
 				current_file = CFilesReader.readFile(file);//Take filepath and load it into a String
 				//System.out.println("File loaded in");
 				//call sanitize method below
-				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file));
+				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file, args[args.length-1]));
 				/*for(int k = 0; k < file_tokens.size(); k++) {
 					System.out.println(k + " " +file_tokens.get(k).getClass() + ": " + file_tokens.get(k).getText() );
 				}*/
@@ -48,10 +49,6 @@ public class Application {
 						//System.out.println("Method indices: " + method_indices[0] + ", " + method_indices[1]);
 						rename = new Renamer(Parser.subarray(file_tokens, method_indices[0], method_indices[1]));
 						qualified_name = file + ":" + rename.getTokens().get(1).getText() + ":" + rename.getTokens().get(1).getLine();
-						if (!filesWithDuplicates.contains(file))//keeps track of files with duplicates
-							{filesWithDuplicates.add(file);
-							filesAffected++;
-							}
 						rename.parseFile();
 						method_tokens = rename.getTokens();
 						//System.out.println("method_tokens size: " + method_tokens.size());
@@ -63,6 +60,10 @@ public class Application {
 								isDuplicate = true;
 								//Record location of this duplicate, but throw away its tokenized representation
 								method.addDuplicate(qualified_name);
+								if (!filesWithDuplicates.contains(file))//keeps track of files with duplicates
+								{	filesWithDuplicates.add(file);
+									filesAffected++;
+								}
 								break;
 							}
 						}

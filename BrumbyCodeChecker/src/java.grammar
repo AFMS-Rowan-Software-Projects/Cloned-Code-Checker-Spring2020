@@ -1,4 +1,4 @@
-Package sablecc;
+Package sableccjava;
 
 Helpers
 ascii_character     = [0..0xff];

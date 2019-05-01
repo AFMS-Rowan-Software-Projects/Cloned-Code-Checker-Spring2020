@@ -27,7 +27,7 @@ public class SearchFile {
 			searchDirectory(new File(file), lang);
 			return javafiles;
 		} else {
-			System.out.print("No file extention provided");
+			System.out.print("No file extension provided");
 			return null;
 		}
 	}
