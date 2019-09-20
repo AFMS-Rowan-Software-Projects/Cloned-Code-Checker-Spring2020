@@ -33,8 +33,9 @@ public static ArrayList<Token> ConvertToList(String a, String lang) {
 			catch (sablecc.lexer.LexerException le)
 			{ System.out.println ("Lexer Exception " + le); }
 			catch (IOException ioe)
-			{ System.out.println ("IO Exception " +ioe); }
-		}else if(lang.equals(".java")) {
+			{ System.out.println ("IO Exception " + ioe); }
+		} // end of if(lang.equals...cpp)
+		else if(lang.equals(".java")) {
 			jlex = new sablecc.java_lexer.Lexer
 					(new PushbackReader
 					(new StringReader(a), 1024));
@@ -49,7 +50,7 @@ public static ArrayList<Token> ConvertToList(String a, String lang) {
 			catch (sablecc.java_lexer.LexerException le)
 			{ System.out.println ("Lexer Exception " + le); }
 			catch (IOException ioe)
-			{ System.out.println ("IO Exception " +ioe); }
+			{ System.out.println ("IO Exception " + ioe); }
 		}
 		return tokens;
 	} 

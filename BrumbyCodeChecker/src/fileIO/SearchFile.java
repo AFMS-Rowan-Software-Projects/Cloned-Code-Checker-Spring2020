@@ -11,22 +11,31 @@ import java.util.List;
 public class SearchFile {
 	private static ArrayList<String> cppfiles = new ArrayList<String>();
 	private static ArrayList<String> javafiles = new ArrayList<String>();
+	private static ArrayList<String> adafiles = new ArrayList<String>();
 	private String lang;
 
 	/**
 	 * @param file file to search for within the directories
-	 * @return
+	 * @return an ArrayList of Files of Strings
+	 * @param String lang maps to the corresponding grammar in tokenlister
 	 */
 	public static ArrayList<String> searchForFile(String file, String lang) {
 		cppfiles.clear();
 		javafiles.clear();
+		adafiles.clear();
 		if (lang.equals(".cpp")) {
 			searchDirectory(new File(file), lang);
 			return cppfiles;
-		} else if (lang.equals(".java")) {
+		} 
+		else if (lang.equals(".java")) {
 			searchDirectory(new File(file), lang);
 			return javafiles;
-		} else {
+		} 
+		else if (lang.equals(".ada")) {
+			searchDirectory(new File(file), lang);
+			return adafiles;
+		}
+		else {
 			System.out.print("No file extension provided");
 			return null;
 		}
@@ -35,6 +44,7 @@ public class SearchFile {
 	/**
 	 * @param directory directory to search
 	 * @param lang      language to search for in each file in each directory
+	 * getAbsoluteFile Returns the absolute form of this abstract pathname
 	 */
 	public static void searchDirectory(File directory, String lang) {
 		if (directory.isDirectory())
@@ -53,13 +63,19 @@ public class SearchFile {
 				for (File temp : file.listFiles())
 					if (temp.isDirectory())
 						search(temp, lang);
-					else if ((temp.getName().length() >= 5) &&(temp.getName().substring(temp.getName().length() - 4, temp.getName().length())
+					// Add cpp & hpp files to ArrayList of CPP Files
+					else if ((temp.getName().length() >= 5) && (temp.getName().substring(temp.getName().length() - 4, temp.getName().length())
 							.equals(".cpp")) || temp.getName().substring(temp.getName().length() - 4, temp.getName().length())
 							.equals(".hpp"))
 						cppfiles.add(temp.getAbsoluteFile().toString());
+					// Add java files to ArrayList of Java Files
 					else if ((temp.getName().length() >= 6) && (temp.getName().substring(temp.getName().length() - 5, temp.getName().length())
 							.equals(".java")))
 						javafiles.add(temp.getAbsoluteFile().toString());
+					// Add ada files to the ArrayList of Ada Files
+					else if ((temp.getName().length() >= 5) && (temp.getName().substring(temp.getName().length() - 4, temp.getName().length())
+							.equals(".ada")))
+						
+						adafiles.add(temp.getAbsoluteFile().toString());
 	}
-
 }

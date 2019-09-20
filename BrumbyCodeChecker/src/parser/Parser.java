@@ -3,6 +3,7 @@ import sablecc.node.*;
 import java.util.ArrayList;
 public class Parser{
    
+	// TODO For % similarity. Not implemented yet
    public static double similarity(ArrayList<Token> list1, ArrayList<Token> list2){
       //Assume sanitize has been called on the input already, getting rid of Whitespace and Comments
       if(list1.size() != list2.size()){
@@ -18,30 +19,45 @@ public class Parser{
       return matches / len;
    }
    
+   /**
+    * Looks in the Token ArrayList. Looks for features that signifies the start of a method. I.E public, private
+    * Then a return type, name, and parameters (if any)
+    * (Finds the start and end of a method)
+    * @param ArrayList
+    * @param start
+    * @return indices
+    */
    public static int[] findMethod(ArrayList<Token> file, int start){
-      int[] indices = new int[2];//Returns start and end index (inclusively) of a method within a file
+	  //Returns start and end index (inclusively) of a method within a file
+      int[] indices = new int[2];
       int lbracecounter;
-      for(indices[0] = start; indices[0] < (file.size() - 6); indices[0]++){//Smallest possible method is 6 tokens long
+      //Smallest possible method is 6 tokens long
+      for(indices[0] = start; indices[0] < (file.size() - 6); indices[0]++){
          //REMINDER: If grammar is expanded to include data types, REWRITE this section accordingly
          indices[1] = indices[0] + 3;
          //Match starting pattern of method- Identifier Identifier LParen
-         //System.out.println("Indices " + indices[0] + " " + indices[1]);
-         if(((file.get(indices[0]) instanceof TDataType) || (file.get(indices[0]) instanceof TIdentifier)) && (file.get(indices[0]+1) instanceof TIdentifier) && (file.get(indices[0]+2) instanceof TLParen)){
-          //Capture everything between ( and ) of a method
-        	 //System.out.println("found signature: " + indices[0] + " " + indices[1]);
-          while(!(file.get(indices[1]) instanceof TRParen) && (indices[1] < (file.size() - 3))){
-            indices[1]++;
+         if(((file.get(indices[0]) instanceof TDataType) || 
+        		 (file.get(indices[0]) instanceof TIdentifier)) && 
+        		 (file.get(indices[0]+1) instanceof TIdentifier) && 
+        		 (file.get(indices[0]+2) instanceof TLParen)) {
+        	 //Capture everything between ( and ) of a method
+        	 while(!(file.get(indices[1]) instanceof TRParen) && 
+        			 (indices[1] < (file.size() - 3))) {
+        		 indices[1]++;
           }
-          //System.out.println("RParen: " + indices[1]);
           indices[1]++;
-          if(indices[1] > (file.size() - 2)){//EOF reached
-            indices[0] = file.size();//Record that method was not found
+          // EOF reached (End of File)
+          if(indices[1] > (file.size() - 2)){
+        	// Record that method was not found
+            indices[0] = file.size();
             break;
           }
-          if(!(file.get(indices[1]) instanceof TLBrace)){//{ should be immediately after )
+          if(!(file.get(indices[1]) instanceof TLBrace)){ //{ should be immediately after )
             continue;
-          }else{
-            lbracecounter = 1;//Match up braces with one another and only terminate when finding the method's }
+          }
+          else{
+        	//Match up braces with one another and only terminate when finding the method's }
+            lbracecounter = 1;
             for(indices[1]++; (lbracecounter != 0) && (indices[1] < file.size()); indices[1]++){
                if(file.get(indices[1]) instanceof TLBrace){
                   lbracecounter++;
@@ -55,14 +71,19 @@ public class Parser{
             }
           }
          }
-      }
-      if(indices[0] >= (file.size() - 6)){//Sentinel value indicates no method was found between starting position and EOF
+      } // end of for(indices[0]...)
+      
+      //Sentinel value indicates no method was found between starting position and EOF
+      if(indices[0] >= (file.size() - 6)){
          indices[0] = -1;
       }
-      return indices;
+      return indices; // returns the line number where the method starts
    }
    
    
+   /**
+    * Cleans up tokens/gets rid of unused tokens
+    */
    public static ArrayList<Token> sanitize(ArrayList<Token> t_large){
    //NOTE: this method may become unnecessary if Ignored Tokens aren't produced by the Scanner
 	   ArrayList<Token> tlist = (ArrayList<Token>) t_large.clone();
@@ -83,8 +104,7 @@ public class Parser{
        int e = end;
        ArrayList<Token> bleh = new ArrayList<Token>();
    
-       for(int i =s; i<=e; i++)
-       {
+       for(int i =s; i<=e; i++) {
            bleh.add(rec.get(i));
        }
 
