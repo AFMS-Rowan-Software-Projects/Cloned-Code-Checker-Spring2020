@@ -1,7 +1,9 @@
 package fileIO;
 
 /**
- * This class searches through the provided directories and adds .cpp files to 'cppfiles' and adds .java files to 'javafiles'
+ * This class searches through the provided directories 
+ * and looks for the lang parameters to check which files are of which language
+ * and store them into their related ArrayList
  */
 
 import java.io.File;
@@ -15,9 +17,9 @@ public class SearchFile {
 	private String lang;
 
 	/**
-	 * @param file file to search for within the directories
+	 * @param file - to search for within the directories
+	 * @param lang - maps to the corresponding grammar in tokenlister
 	 * @return an ArrayList of Files of Strings
-	 * @param String lang maps to the corresponding grammar in tokenlister
 	 */
 	public static ArrayList<String> searchForFile(String file, String lang) {
 		cppfiles.clear();
@@ -42,20 +44,20 @@ public class SearchFile {
 	}
 
 	/**
-	 * @param directory directory to search
-	 * @param lang      language to search for in each file in each directory
-	 * getAbsoluteFile Returns the absolute form of this abstract pathname
+	 * @param directory - directory to search
+	 * @param lang      - language to search for in each file in each directory
 	 */
 	public static void searchDirectory(File directory, String lang) {
 		if (directory.isDirectory())
 			search(directory, lang);
+		// getAbsoluteFile Returns the absolute form of this abstract pathname
 		else
 			System.out.println(directory.getAbsoluteFile() + " is not a valid directory.");
 	}
 
 	/**
-	 * @param file file currently searching for
-	 * @param lang check each file for this file extension
+	 * @param file - file currently searching for
+	 * @param lang - check each file for this file extension
 	 */
 	private static void search(File file, String lang) {
 		if (file.isDirectory())

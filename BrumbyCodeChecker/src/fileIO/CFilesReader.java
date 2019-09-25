@@ -2,6 +2,9 @@ package fileIO;
 import java.io.*;
 import java.util.logging.Logger;
 
+/**
+ * Reads in everything in a file
+ */
 public class CFilesReader {
 
 	private static final Logger LOGGER = Logger.getLogger(CFilesReader.class.getName());

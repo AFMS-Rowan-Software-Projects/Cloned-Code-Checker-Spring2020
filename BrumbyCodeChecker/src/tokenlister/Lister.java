@@ -51,7 +51,7 @@ public static ArrayList<Token> ConvertToList(String a, String lang) {
 			{ System.out.println ("Lexer Exception " + le); }
 			catch (IOException ioe)
 			{ System.out.println ("IO Exception " + ioe); }
-		}
+		} // end of if(lang.equals...java)
 		return tokens;
 	} 
 	
