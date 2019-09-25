@@ -12,7 +12,7 @@ import brumby.*;
 
 /**
  * To run this program, right click Application.java 
- * Run As --> Run Configurations --> Arguments Tab
+ * Run As -- Run Configurations -- Arguments Tab
  * Copy and paste a pathname to a folder containing java, cpp, or ada files
  * After the pathname is copied, hit 'space' and type ".java", ".cpp", or ".ada"
  * Hit run.
