@@ -1,0 +1,90 @@
+Package lexing;
+
+Helpers
+ascii_character     = [0..0xff];
+  ascii_small         = ['a'..'z'];
+  ascii_caps          = ['A'..'Z'];
+  unicode_character   = [0..0xffff];
+
+  ht  = 0x09;
+  lf  = 0x0a;
+  ff  = 0x0c;
+  cr  = 0x0d;
+  sp  = ' ';
+
+  line_terminator     = lf | cr | cr lf;
+  input_character     = [ascii_character - [cr + lf]];
+  uni_input_character = [unicode_character - [cr + lf]];
+
+  not_star            = [input_character - '*'] | line_terminator;
+  not_star_not_slash  = [input_character - ['*' + '/']] | line_terminator;
+
+
+  digit               = ['0'..'9'];
+  letter              = ascii_small | ascii_caps | '_';
+  letter_or_digit     = letter | digit;
+
+  non_zero_digit      = ['1'..'9'];
+  hex_digit           = ['0'..'9'] | ['a'..'f'] | ['A'..'F'];
+  octal_digit         = ['0'..'7'];
+
+  decimal_numeral     = '0' | non_zero_digit digit*;
+  hex_numeral         = '0' ('x' | 'X') hex_digit+;
+  octal_numeral       = '0' octal_digit+;
+
+  exponent_part       = ('e' | 'E') ('+' | '-')? digit+;
+
+  fixed_type_suffix   = 'd' | 'D';
+
+  single_character    = [input_character - [''' + '\']];
+  wide_single_character = [uni_input_character - [''' + '\']];
+
+  octal_escape        = '\' (octal_digit | octal_digit octal_digit | octal_digit octal_digit
+octal_digit);
+  hex_escape          = '\' ('x' | 'X') (hex_digit | hex_digit hex_digit);
+  unicode_escape      = '\' ('u' | 'U') (
+                          hex_digit |
+                          hex_digit hex_digit |
+                          hex_digit hex_digit hex_digit |
+                          hex_digit hex_digit hex_digit hex_digit );
+
+  escape_sequence     = '\n' | '\t' | '\v' | '\b' | '\r' | '\f' | '\a' | '\"' | '\' ''' | '\\
+' |
+                          octal_escape | hex_escape | unicode_escape;
+
+string_character    = [input_character - ['"' + '\']] | escape_sequence;
+wide_string_character = [uni_input_character - ['"' + '\']] | escape_sequence;
+
+
+Tokens
+
+l_brace = '{';
+r_brace = '}';
+l_paren = '(';
+r_paren = ')';
+
+keyword = 'abstract' | 'any' | 'attribute' | 'boolean' | 'case' |
+                'char' | 'const' | 'context' | 'custom' | 'default' |
+                'double' | 'enum' | 'exception' | 'factory' |
+                'false' | 'fixed' | 'float' | 'in' | 'inout' |
+                'interface' | 'long' | 'module' | 'native' |
+                'octet' | 'object' | 'oneway' | 'out' | 'private' |
+                'public' | 'raises' | 'readonly' | 'sequence' |
+                'short' | 'string' | 'struct' | 'supports' |
+                'switch' | 'true' | 'truncatable' | 'typedef' |
+                'union' | 'unsigned' | 'valuebase' | 'valuetype' |
+                'void' | 'wchar' | 'wstring';
+blank = (sp | ht | ff | line_terminator)*;
+identifier = letter letter_or_digit*;
+
+traditional_comment = '/*' not_star+ '*'+ (not_star_not_slash not_star* '*'+)* '/';
+documentation_comment =    '/**' '*'* (not_star_not_slash not_star* '*'+)* '/';
+end_of_line_comment = '//' input_character* line_terminator?;
+
+
+Ignored Tokens
+blank,
+  traditional_comment,
+  documentation_comment,
+  end_of_line_comment;
+

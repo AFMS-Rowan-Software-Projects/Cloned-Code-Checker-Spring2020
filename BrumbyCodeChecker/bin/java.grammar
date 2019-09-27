@@ -1,0 +1,118 @@
+Package sableccjava;
+
+Helpers
+ascii_character     = [0..0xff];
+  ascii_small         = ['a'..'z'];
+  ascii_caps          = ['A'..'Z'];
+  unicode_character   = [0..0xffff];
+
+  ht  = 0x09;
+  lf  = 0x0a;
+  ff  = 0x0c;
+  cr  = 0x0d;
+  sp  = ' ';
+
+  line_terminator     = lf | cr | cr lf;
+  input_character     = [ascii_character - [cr + lf]];
+  uni_input_character = [unicode_character - [cr + lf]];
+
+  not_star            = [input_character - '*'] | line_terminator;
+  not_star_not_slash  = [input_character - ['*' + '/']] | line_terminator;
+
+
+  digit               = ['0'..'9'];
+  letter              = ascii_small | ascii_caps | '_';
+  letter_or_digit     = letter | digit;
+
+  non_zero_digit      = ['1'..'9'];
+  hex_digit           = ['0'..'9'] | ['a'..'f'] | ['A'..'F'];
+  octal_digit         = ['0'..'7'];
+
+  decimal_numeral     = '0' | non_zero_digit digit*;
+  hex_numeral         = '0' ('x' | 'X') hex_digit+;
+  octal_numeral       = '0' octal_digit+;
+
+  exponent_part       = ('e' | 'E') ('+' | '-')? digit+;
+
+  fixed_type_suffix   = 'd' | 'D';
+
+  single_character    = [input_character - [''' + '\']];
+  wide_single_character = [uni_input_character - [''' + '\']];
+
+  octal_escape        = '\' (octal_digit | octal_digit octal_digit | octal_digit octal_digit
+octal_digit);
+  hex_escape          = '\' ('x' | 'X') (hex_digit | hex_digit hex_digit);
+  unicode_escape      = '\' ('u' | 'U') (
+                          hex_digit |
+                          hex_digit hex_digit |
+                          hex_digit hex_digit hex_digit |
+                          hex_digit hex_digit hex_digit hex_digit );
+
+  escape_sequence     = '\n' | '\t' | '\v' | '\b' | '\r' | '\f' | '\a' | '\"' | '\' ''' | '\\' |
+                          octal_escape | hex_escape | unicode_escape;
+
+string_character    = [input_character - ['"' + '\']] | escape_sequence;
+wide_string_character = [uni_input_character - ['"' + '\']] | escape_sequence;
+
+
+Tokens
+traditional_comment = '/*' not_star+ '*'+ (not_star_not_slash not_star* '*'+)* '/';
+documentation_comment =    '/**' '*'* (not_star_not_slash not_star* '*'+)* '/';
+end_of_line_comment = '//' input_character* line_terminator?;
+
+
+l_brace = '{';
+r_brace = '}';
+l_paren = '(';
+r_paren = ')';
+
+data_type = 'boolean' | 'byte' | 'char' | 'short' | 'int' | 
+				'long' | 'float' | 'double' | 'String';
+
+numeric_constant = decimal_numeral |
+                          hex_numeral |
+                          octal_numeral |
+      digit+ '.' digit* fixed_type_suffix |
+      '.' digit+ fixed_type_suffix |
+      digit+ fixed_type_suffix |
+      digit+ '.' digit* exponent_part? |
+      '.' digit+ exponent_part? |
+      digit+ exponent_part;
+	  
+text_literal = ''' (single_character | escape_sequence) ''' |
+	'L' ''' (wide_single_character | escape_sequence) '''
+  |'"' string_character* '"' |'L' '"' wide_string_character* '"';	  
+  
+keyword = 'abstract' | 'assert' |
+				'break' |
+				'case' | 'catch' | 'class' | 'const' | 'continue' |
+				'default' | 'do' |
+				'else' | 'enum' | 'extends' |
+				'final' | 'finally' | 'for' |
+				'goto'|
+				'if' | 'implements' | 'import' | 'instanceof' | 'interface' |
+				'native' | 'new' |
+				'package' | 'private' | 'protected' | 'public' |
+				'return' | 
+				'short' | 'static' | 'strictfp' | 'super' | 'switch' | 'synchronized' |
+				'this' | 'throw' | 'throws' | 'transient' | 'try' |
+				'void' | 'volatile' |
+				'while'|
+				'+' | '++' | '-' | '--' | '*' | '/' | '%' | 
+				'<' | '<=' | '>' | '>=' | '==' | '=' | '!' | '!=' |
+				'&' | '&&' | '|' | '||' | '<<' | '>>' | '~' | '^' |
+				'?:' | ',' | '.' | ';' | '?' | ':' | '>>>' | '+=' |
+				'-=' | '*=' | '/=' | '|=' | '^=' | '%=' | '<<=' | 
+				'>>=' | '>>>=' |
+				('#pragma' | '#include' | '#ifndef' | '#define' | '#endif' ) input_character* line_terminator;
+blank = (sp | ht | ff | line_terminator)*;
+identifier = letter letter_or_digit*;
+
+unknown = unicode_character;
+
+
+Ignored Tokens
+blank,
+  traditional_comment,
+  documentation_comment,
+  end_of_line_comment;
