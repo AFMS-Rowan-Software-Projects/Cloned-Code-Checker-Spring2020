@@ -1,10 +1,7 @@
 package driver;
 
 import fileIO.*;
-import java.io.File;
 import java.util.ArrayList;
-import sablecc.analysis.*;
-import sablecc.lexer.*;
 import sablecc.node.*;
 import parser.*;
 import tokenlister.*;
