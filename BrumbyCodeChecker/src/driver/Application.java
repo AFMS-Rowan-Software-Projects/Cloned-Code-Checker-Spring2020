@@ -210,11 +210,8 @@ public class Application {
 								similarMethods.add(new TokenizedMethod(qualified_name, method.getLocation(), perc)); 
 							}
 						}
-						
-						if (!isDuplicate) { 
-							// Add to list of unique methods to keep checking
-							methods.add(new TokenizedMethod(qualified_name, method_tokens));
-						}
+						// Add to list of unique methods to keep checking
+						methods.add(new TokenizedMethod(qualified_name, method_tokens));
 					}
 				}
 			}
