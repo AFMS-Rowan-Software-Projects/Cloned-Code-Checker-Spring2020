@@ -2,11 +2,8 @@ package parser;
 
 import sablecc.node.*;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Parser {
 
@@ -27,50 +24,74 @@ public class Parser {
 		return matches / len;
 	}
 
-/**
- * Computes similarity percent between two methods.
- */
 	public static double closeEnough(ArrayList<Token> list1, ArrayList<Token> list2) {
 		// Assume sanitize has been called on the input already, getting rid of
 		// Whitespace and Comments
 
-		Set<Token> unionList = new HashSet<>(); // Stores the union of both lists
-		final Map<String,AtomicLong> map1 = new ConcurrentHashMap<>();
-		final Map<String,AtomicLong> map2 = new ConcurrentHashMap<>();
-		
+		final Map<String,Double> map1 = new HashMap<>();
+		final Map<String,Double> map2 = new HashMap<>();
+		double freq;
 		
 		//Map tokens to their frequency 
-		for(int i = 0; i < list1.size(); i++) { //Map first list
-			map1.computeIfAbsent(list1.get(i).getText(), k->new AtomicLong(0)).incrementAndGet();
+		for(Token t: list1) { // Map first list
+			if(map1.containsKey(t.getText())) {
+				freq = map1.get(t.getText()) + 1.0;
+				map1.replace(t.getText(), freq);
+			}				
+			else {
+				map1.put(t.getText(), 1.0);
+			}
+		}
+
+		for(Token t: list2) { // Map second list
+			if(map2.containsKey(t.getText())) {
+				freq = map2.get(t.getText()) + 1.0;
+				map2.replace(t.getText(), freq);
+			}				
+			else {
+				map2.put(t.getText(), 1.0);
+			}
 		}
 		
-		for(int i = 0; i < list2.size(); i++) { //Map second list
-			map2.computeIfAbsent(list2.get(i).getText(), k->new AtomicLong(0)).incrementAndGet();
-		}
+		// Calculate Term-Frequency (TF = frequency of token / total number of tokens)
+		map1.forEach((k, v) -> map1.replace(k, v.doubleValue()/map1.size()));
+		map2.forEach((k, v) -> map2.replace(k, v.doubleValue()/map2.size()));
+		
 		
 		//Get the token union of both lists
-		unionList.addAll(list1);
-		unionList.addAll(list2);
+		UnionHashSet union = new UnionHashSet(map1, map2);
+		ArrayList<String> unionSet = union.createUnionSet();
 		
-		//Calculate union
+		/*	Multiply TF by Inverse Document Frequency (IDF)
+		 *  IDF = 1 + log (total number of documents / number of documents with specified token)
+		 *  
+		 *  In one list -> 1 + log(2/1) = 1.6931472			 
+		 *  In both lists -> 1 + log(2/2) = 1
+		*/
 		double cosine, v1, v2, length_v1 = 0, length_v2 = 0, dotProduct = 0;
 		
-		for(Token s: unionList) {
+		for(String s: unionSet) {
 			//Set current vector pairs' frequencies to 0)
 			v1 = 0;
 			v2 = 0;
 			
-			//If the key is in the list, assign frequency stored 
-			if(map1.containsKey(s.getText())) {
-				v1 = map1.get(s.getText()).doubleValue(); 
+			
+			if(map1.containsKey(s)) {
+				v1 = map1.get(s).doubleValue(); 
+				if(!map2.containsKey(s)) { // Token unique to map1
+					v1 *= 1.6931472; 
+				}
 				length_v1 += v1*v1;  
 			}
-			if(map2.containsKey(s.getText())) {
-				v2 = map2.get(s.getText()).doubleValue();
+			if(map2.containsKey(s)) {
+				v2 = map2.get(s).doubleValue();
+				if(!map1.containsKey(s)) { // Token unique to map2
+					v2 *= 1.6931472;
+				}
 				length_v2 += v2*v2; 
 			}
 			dotProduct += v1*v2;
-		} 
+		}
 		
 		//Compute the cosine similarity
 		cosine = dotProduct/( Math.sqrt(length_v1)*(Math.sqrt(length_v2)));
@@ -78,7 +99,8 @@ public class Parser {
 		//Return percentage
 		return (cosine*100);
 	}
-
+	
+	
 	/**
 	 * Looks in the Token ArrayList. Looks for features that signifies the start of
 	 * a method. I.E public, private (or none), then a return type, name, and parameters (if
