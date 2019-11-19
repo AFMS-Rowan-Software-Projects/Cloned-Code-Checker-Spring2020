@@ -8,7 +8,6 @@ package fileIO;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SearchFile {
 	private static ArrayList<String> cppfiles = new ArrayList<String>();
@@ -77,7 +76,6 @@ public class SearchFile {
 					// Add ada files to the ArrayList of Ada Files
 					else if ((temp.getName().length() >= 5) && (temp.getName().substring(temp.getName().length() - 4, temp.getName().length())
 							.equals(".ada")))
-						
 						adafiles.add(temp.getAbsoluteFile().toString());
 	}
 }

@@ -19,7 +19,7 @@ public class ParserTest {
 		//first want to input example
 		//then run some ifs to check if the returned int[] is correct
 		CFilesReader cfr = new CFilesReader();
-		String tester = cfr.readFile(".//src//cpp_data//identicalTest//Coins.cpp");
+		String tester = CFilesReader.readFile(".//src//cpp_data//identicalTest//Coins.cpp");
 		List = Parser.sanitize(Lister.ConvertToList(tester));
 		if( !(Lister.ConvertToList(tester).size() > List.size()))
 			System.out.println("Sanitize not Working properly");

@@ -12,8 +12,8 @@ public class CFilesReaderTest {
 	CFilesReader cfr = new CFilesReader();
 	@Test
 	public void readFilesTest() {
-		String file1 = cfr.readFile("src//cpp_data//Coins.txt");
-		String file2 = cfr.readFile("src//cpp_data//otherCoins.txt");
+		String file1 = CFilesReader.readFile("src//cpp_data//Coins.txt");
+		String file2 = CFilesReader.readFile("src//cpp_data//otherCoins.txt");
 		
 		String[] files = {file1, file2};
 		

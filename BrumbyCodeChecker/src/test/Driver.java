@@ -2,8 +2,6 @@ package test;
 import fileIO.CFilesReader;
 import java.io.File;
 import java.util.ArrayList;
-import sablecc.analysis.*;
-import sablecc.lexer.*;
 import sablecc.node.*;
 import parser.*;
 

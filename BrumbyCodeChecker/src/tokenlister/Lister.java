@@ -1,15 +1,15 @@
 package tokenlister;
+
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.io.*;
 import sablecc.node.*;
-import sablecc.lexer.*;
-import sablecc.java_lexer.*;
-
-
 
 public class Lister {
 	private static sablecc.lexer.Lexer lex;
 	private static sablecc.java_lexer.Lexer jlex;
+	private static sablecc.ada_lexer.Lexer alex;
 	private static ArrayList<Token> tokens;
 
 	
@@ -35,6 +35,8 @@ public static ArrayList<Token> ConvertToList(String a, String lang) {
 			catch (IOException ioe)
 			{ System.out.println ("IO Exception " + ioe); }
 		} // end of if(lang.equals...cpp)
+	
+	
 		else if(lang.equals(".java")) {
 			jlex = new sablecc.java_lexer.Lexer
 					(new PushbackReader
@@ -42,7 +44,6 @@ public static ArrayList<Token> ConvertToList(String a, String lang) {
 			try {
 				T = jlex.next();
 				while (!(T instanceof EOF)) {
-					//System.out.println(T.getClass() + ": " + T.getText());
 					tokens.add(T);
 					T = jlex.next();
 				}
@@ -52,9 +53,7 @@ public static ArrayList<Token> ConvertToList(String a, String lang) {
 			catch (IOException ioe)
 			{ System.out.println ("IO Exception " + ioe); }
 		} // end of if(lang.equals...java)
+	
 		return tokens;
 	} 
-	
-	
-	
 }

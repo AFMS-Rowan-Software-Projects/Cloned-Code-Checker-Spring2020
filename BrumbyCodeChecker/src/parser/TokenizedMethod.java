@@ -1,5 +1,6 @@
 package parser;
 
+import sablecc.node.Switch;
 import sablecc.node.Token;
 import java.util.ArrayList;
 
@@ -7,11 +8,13 @@ import java.util.ArrayList;
  * Holds tokens from each method within a file
  */
 
-public class TokenizedMethod {
+public class TokenizedMethod extends Token{
 	private String fileLocation;
+	private String secondFileLocation;
 	private ArrayList<Token> tokens;
 	private boolean hasDuplicate;
 	private int duplicates = 1;
+	private double similarityPercent;
 	
 	/**
 	 * 
@@ -25,15 +28,18 @@ public class TokenizedMethod {
 	}
 	
 	/**
+	 * To be stored as a duplicate found from the methods compared and the percentage of similarity
 	 * 
-	 * @param filePath
+	 * @param filePath1
+	 * @param filepath2
+	 * @param percent
 	 */
-	public void addDuplicate(String filePath) {
-		hasDuplicate = true;
-		fileLocation += "\n" + filePath;
-		return;
+	public TokenizedMethod(String filePath1, String filepath2, double percent) {
+		fileLocation = filePath1;
+		secondFileLocation = filepath2;
+		similarityPercent = percent;
 	}
-
+	
 	/**
 	 * 
 	 * @return lines - the number of lines that are duplicate from multiple files within a directory
@@ -54,8 +60,12 @@ public class TokenizedMethod {
 		return tokens;
 	}
 	
-	public String toString() {
+	public String getLocation() {
 		return fileLocation;
+	}
+	
+	public double getPercentage() {
+		return similarityPercent;
 	}
 	
 	public boolean hasDuplicate() {
@@ -64,5 +74,21 @@ public class TokenizedMethod {
 		
 		return hasDuplicate;
 	}
+	
+	@Override
+	public String toString() {
+		return fileLocation + "\n" + secondFileLocation + "\n----------> %" + similarityPercent;
+	}
 
+	@Override
+	public void apply(Switch sw) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object clone() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
