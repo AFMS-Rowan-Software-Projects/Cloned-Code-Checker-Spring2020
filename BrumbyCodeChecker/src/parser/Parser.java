@@ -7,31 +7,33 @@ import java.util.Map;
 
 public class Parser {
 
-	// TODO For % similarity. Not implemented yet
+	/**
+	 * Get the average between cosine similarity, longest common subsequence and naive algorithms 
+	 */
 	public static double similarity(ArrayList<Token> list1, ArrayList<Token> list2) {
 		// Assume sanitize has been called on the input already, getting rid of
 		// Whitespace and Comments
-		if (list1.size() != list2.size()) {
-			return 0.1;
-		}
-		double len = list1.size();
-		double matches = 0;
-		for (int i = 0; i < len; i++) {
-			if (list1.get(i).getText().equals(list2.get(i).getText())) {
-				matches++;
-			}
-		}
-		return matches / len;
+		
+		//Adjust Longest Common Subsequence ratio
+		double smallerSize = (list1.size()<list2.size()) ? list1.size() : list2.size(); 
+		Map<String, Integer> lookup = new HashMap<>();
+		
+		//Average of all approaches 
+		return ((cosineSimilarity(list1, list2)) +
+				((LCSLength(list1, list2, list1.size(), list2.size(), lookup)/smallerSize)*100))/2;
 	}
 
-	public static double closeEnough(ArrayList<Token> list1, ArrayList<Token> list2) {
+	/**
+	 * Compute the cosine similarity of two methods
+	 */
+	public static double cosineSimilarity(ArrayList<Token> list1, ArrayList<Token> list2) {
 		// Assume sanitize has been called on the input already, getting rid of
 		// Whitespace and Comments
 
 		final Map<String,Double> map1 = new HashMap<>();
 		final Map<String,Double> map2 = new HashMap<>();
 		double freq;
-		
+
 		//Map tokens to their frequency 
 		for(Token t: list1) { // Map first list
 			if(map1.containsKey(t.getText())) {
@@ -63,7 +65,7 @@ public class Parser {
 		ArrayList<String> unionSet = union.createUnionSet();
 		
 		/*	Multiply TF by Inverse Document Frequency (IDF)
-		 *  IDF = 1 + log (total number of documents / number of documents with specified token)
+		 *  IDF = 1 + log (total number of methods / number of methods with specified token)
 		 *  
 		 *  In one list -> 1 + log(2/1) = 1.6931472			 
 		 *  In both lists -> 1 + log(2/2) = 1
@@ -100,7 +102,37 @@ public class Parser {
 		return (cosine*100);
 	}
 	
-	
+	/**
+	 * Compute the longest common subsequence between two methods 
+	 */
+	public static int LCSLength(ArrayList<Token> X, ArrayList<Token> Y, int m, int n, 
+								Map<String, Integer> lookup)
+	{
+		// return if we have reached the end of either string
+		if (m == 0 || n == 0)
+			return 0;
+
+		// construct a unique map key from dynamic elements of the input
+		String key = m + "|" + n;
+
+		// if sub-problem is seen for the first time, solve it and 
+		// store its result in a map
+		if (!lookup.containsKey(key))
+		{
+			// if last character of X and Y matches
+			if (X.get(m - 1).getText().equals(Y.get(n - 1).getText())) {
+				lookup.put(key, LCSLength(X, Y, m - 1, n - 1, lookup) + 1);
+			} 
+			else {
+				// else if last character of X and Y don't match
+				lookup.put(key, Integer.max(LCSLength(X, Y, m, n - 1, lookup),
+						LCSLength(X, Y, m - 1, n, lookup)));
+			}
+		}
+		// return the subproblem solution from the map
+		return lookup.get(key);
+	}
+
 	/**
 	 * Looks in the Token ArrayList. Looks for features that signifies the start of
 	 * a method. I.E public, private (or none), then a return type, name, and parameters (if
@@ -200,8 +232,6 @@ public class Parser {
 		for (int i = s; i <= e; i++) {
 			bleh.add(rec.get(i));
 		}
-
 		return bleh;
 	}
-
 }

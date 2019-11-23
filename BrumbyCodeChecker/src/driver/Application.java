@@ -139,7 +139,6 @@ public class Application {
 		return outputString;
 	}
 
-
 	/*
 	 * To be used when running the application as a normal java application
 	 * Takes in the file information via configuration and file io
@@ -149,19 +148,20 @@ public class Application {
 		ArrayList<TokenizedMethod> methods = new ArrayList<TokenizedMethod>(); 
 		ArrayList<TokenizedMethod> similarMethods = new ArrayList<TokenizedMethod>();
 		ArrayList<Token> file_tokens, method_tokens;
-
+		
 		String current_file;
 		String qualified_name;
-
-		int[] method_indices = new int[2];
-
-		boolean isDuplicate;
-		double perc = 0.0;
-		int totalFiles = 0;
-		int filesAffected = 0;
-		int locAffected = 0;
+		String fileCompared = " ";
+		
 		Renamer rename;
-
+		
+		double perc = 0.0;
+		
+		int[] method_indices = new int[2];
+		int totalFiles = 0;
+		int locAffected = 0;
+		int filesAffected = 0;
+		
 		//Get close-match percentage from user
         Scanner in = new Scanner(System.in); 
         System.out.print("\nSpecify a percentage for a close match: "); 
@@ -179,7 +179,7 @@ public class Application {
 				current_file = CFilesReader.readFile(file);
 				// Clean up unused tokens in all files and store it into the ArrayList "file_tokens"
 				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file, args[args.length - 1])); //convert to tokens (lang)
-				
+				fileCompared = file;
 				
 				method_indices[0] = 0; 
 				while (method_indices[0] != -1) {
@@ -195,16 +195,20 @@ public class Application {
 								+ rename.getTokens().get(1).getLine();	//saves (filepath : method name : line number) as a string
 						rename.parseFile();
 						method_tokens = rename.getTokens(); //tokens with id assignments
-						isDuplicate = false;
+				
 						
 						for (TokenizedMethod method : methods) {
 							
 							//compute similarity percent
-							perc = Parser.closeEnough(method.getTokens(), method_tokens);  
+							perc = Parser.similarity(method.getTokens(), method_tokens);  
 							
 							// If similarity percentage is equal or more than the specified close match, store it
 							if (perc >= closeMatch) {
-								isDuplicate = true;
+								//Update count of affected files
+								if(fileCompared.equals(file)) {
+									filesAffected++;
+									fileCompared = " ";
+								}
 								
 								//add to list of similar methods
 								similarMethods.add(new TokenizedMethod(qualified_name, method.getLocation(), perc)); 
@@ -225,7 +229,7 @@ public class Application {
 		} 
 		
 		System.out.println("Total Files: " + totalFiles);
-		//System.out.println("Affected Files: " + );
+		System.out.println("Affected Files: " + filesAffected);
 		//System.out.println("Lines of code affected: " + locAffected);
 	}
 }
