@@ -1,14 +1,12 @@
 package parser;
 
-import sablecc.node.Switch;
 import sablecc.node.Token;
 import java.util.ArrayList;
 
 /**
  * Holds tokens from each method within a file
  */
-
-public class TokenizedMethod extends Token{
+public class TokenizedMethod{
 	private String fileLocation;
 	private String secondFileLocation;
 	private ArrayList<Token> tokens;
@@ -77,17 +75,5 @@ public class TokenizedMethod extends Token{
 	
 	public String toString() {
 		return fileLocation + "\n" + secondFileLocation + "\n----------> %" + similarityPercent;
-	}
-
-	@Override
-	public void apply(Switch sw) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object clone() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
