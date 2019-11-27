@@ -1,6 +1,6 @@
 # Brumby Code Checker:  
 
-The Brumby Code Checker is a redundancy code scanner to effectively find and flag duplicated code in C++, Java, and Ada files. The code checker uses the [SabbleCC](http://sablecc.org/) compiler and a similarity method in which the same length (number of tokens), keyword and identifiers must match exactly. It functions by dividing the number of matches by the total number of tokens. The application works on C++, Java, Ada, and header files.  To do this, it tokenizes the code, then discards comments, white space, and unknown tokens, while also renaming variables to an identifier. 
+The Brumby Code Checker is a redundancy code scanner to effectively find and flag duplicated code in C++, Java, and Ada files. The code checker uses the [SabbleCC](http://sablecc.org/) compiler and a multi dimensional similarity heuristic. It functions by running three independent similarity algorithm and computes a weighted average of those three scores. This heuristic consists of a Cosine Similarity, an ordered Naive (1 to 1) Similarity, and a Longest Common Subsequence algorithm. The application works on C++, Java, Ada, and header files.  To do this, it tokenizes the code, then discards comments, white space, and unknown tokens, while also renaming variables to an identifier. 
 
 # How to Run: 
 ### In Eclipse: 
@@ -16,6 +16,12 @@ The Brumby Code Checker is a redundancy code scanner to effectively find and fla
 * click apply
 
 * click run
+
+* you will be prompted "Specify a percentage for a close match: " which the user will enter a number (0-100) as the minimum percent match between 2 methods that will be accepted 
+
+### In Eclipse Plugin Environment 
+* Please refer to [Code-Checker-Eclipse-Plug-In](https://github.com/AFMS-Rowan-Software-Projects/Code-Checker-Eclipse-Plug-In) repository README for all information 
+
 
 ### In Linux: 
 * clone the git repo
