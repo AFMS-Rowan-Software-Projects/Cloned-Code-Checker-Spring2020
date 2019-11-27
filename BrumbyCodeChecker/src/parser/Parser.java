@@ -8,19 +8,96 @@ import java.util.Map;
 public class Parser {
 
 	/**
-	 * Get the average between cosine similarity, longest common subsequence and naive algorithms 
+	 * Get the average between cosine similarity, longest common subsequence and
+	 * naive algorithms
 	 */
 	public static double similarity(ArrayList<Token> list1, ArrayList<Token> list2) {
 		// Assume sanitize has been called on the input already, getting rid of
 		// Whitespace and Comments
-		
-		//Adjust Longest Common Subsequence ratio
-		double smallerSize = (list1.size()<list2.size()) ? list1.size() : list2.size(); 
+
+		// Adjust Longest Common Subsequence ratio
+		double smallerSize = (list1.size() < list2.size()) ? list1.size() : list2.size();
 		Map<String, Integer> lookup = new HashMap<>();
+
+		// System.out.println("\nCosine " + cosineSimilarity(list1, list2));
+		// System.out.println("\nLCS " + LCSLength(list1, list2, list1.size(),
+		// list2.size(), lookup) / smallerSize * 100);
+		//System.out.println("Naive" + naiveSimilarity(list1, list2));
+
+		// Average of all approaches
+		return ((naiveSimilarity(list1, list2) * .2) + (cosineSimilarity(list1, list2) * .4)
+				+ ((LCSLength(list1, list2, list1.size(), list2.size(), lookup) / smallerSize) * 100) * .4);
+	}
+
+	/*
+	 * Naive comparison for dissimilar sized methods Maintains code ordered structes
+	 * And computes a 1 to 1 mapping
+	 */
+	public static double naiveSimilarity(ArrayList<Token> list1, ArrayList<Token> list2) {
+		// Assume sanitize has been called on the input already, getting rid of
+		// Whitespace and Comments
+		ArrayList<Token> largerList;
+		ArrayList<Token> smallerList;
+		String smallestFirstToken = null;
+		int startPoint = 0;
+		int matches = 0;
+		int smallStart = 0;
+		int largeStart = 0;
+
+		// save the smaller and larger list
+		if (list1.size() < list2.size()) {
+			largerList = list2;
+			smallerList = list1;
+		} else {
+			largerList = list1;
+			smallerList = list2;
+		}
+
+		// find the first non header token in the smaller list
+		// first token after first "{"
+		for (int i = 0; i < 30; i++) {
+			if (smallerList.get(i).getText().equals("{")) {
+				smallestFirstToken = smallerList.get(i + 1).getText();
+				smallStart = i + 1;
+				break;
+			}
+		}
+
+		// exclude everything before { and the }
+		int total = (smallerList.size() - 1) - (smallStart + 1);
+
+		for (int i = 0; i < 30; i++) {
+			if (largerList.get(i).getText().equals("{")) {
+				largeStart = i;
+				break;
+			}
+		}
+
+		// find where to start comparing token to token in the big list
+		for (int i = largeStart; i < largerList.size(); i++) {
+			if (largerList.get(i).getText().equals(smallestFirstToken)
+					&& largerList.get(i + 3).getText().equals(smallerList.get(smallStart + 3).getText())) {
+				startPoint = i;
+				break;
+			}
+		}
+
+		// comparison between the larger list and the smaller list
+		// starting at the first token of the smaller list within the larger one
+		for (int i = startPoint; i < (startPoint + total); i++) {
+			if (largerList.get(i).getText().equals(smallerList.get(smallStart).getText())
+					|| (largerList.get(i).getText().startsWith("id")
+							&& smallerList.get(smallStart).getText().startsWith("id"))) {
+				matches++;
+				// System.out.println(largerList.get(i).getText());
+			}
+			smallStart++;
+		}
+
+		double percent = (matches * 100) / total;
 		
-		//Average of all approaches 
-		return ((cosineSimilarity(list1, list2)) +
-				((LCSLength(list1, list2, list1.size(), list2.size(), lookup)/smallerSize)*100))/2;
+		// weighted percent to method size differences 
+		return percent * (smallerList.size() / largerList.size());
 	}
 
 	/**
@@ -30,84 +107,78 @@ public class Parser {
 		// Assume sanitize has been called on the input already, getting rid of
 		// Whitespace and Comments
 
-		final Map<String,Double> map1 = new HashMap<>();
-		final Map<String,Double> map2 = new HashMap<>();
+		final Map<String, Double> map1 = new HashMap<>();
+		final Map<String, Double> map2 = new HashMap<>();
 		double freq;
 
-		//Map tokens to their frequency 
-		for(Token t: list1) { // Map first list
-			if(map1.containsKey(t.getText())) {
+		// Map tokens to their frequency
+		for (Token t : list1) { // Map first list
+			if (map1.containsKey(t.getText())) {
 				freq = map1.get(t.getText()) + 1.0;
 				map1.replace(t.getText(), freq);
-			}				
-			else {
+			} else {
 				map1.put(t.getText(), 1.0);
 			}
 		}
 
-		for(Token t: list2) { // Map second list
-			if(map2.containsKey(t.getText())) {
+		for (Token t : list2) { // Map second list
+			if (map2.containsKey(t.getText())) {
 				freq = map2.get(t.getText()) + 1.0;
 				map2.replace(t.getText(), freq);
-			}				
-			else {
+			} else {
 				map2.put(t.getText(), 1.0);
 			}
 		}
-		
+
 		// Calculate Term-Frequency (TF = frequency of token / total number of tokens)
-		map1.forEach((k, v) -> map1.replace(k, v.doubleValue()/map1.size()));
-		map2.forEach((k, v) -> map2.replace(k, v.doubleValue()/map2.size()));
-		
-		
-		//Get the token union of both lists
+		map1.forEach((k, v) -> map1.replace(k, v.doubleValue() / map1.size()));
+		map2.forEach((k, v) -> map2.replace(k, v.doubleValue() / map2.size()));
+
+		// Get the token union of both lists
 		UnionHashSet union = new UnionHashSet(map1, map2);
 		ArrayList<String> unionSet = union.createUnionSet();
-		
-		/*	Multiply TF by Inverse Document Frequency (IDF)
-		 *  IDF = 1 + log (total number of methods / number of methods with specified token)
-		 *  
-		 *  In one list -> 1 + log(2/1) = 1.6931472			 
-		 *  In both lists -> 1 + log(2/2) = 1
-		*/
+
+		/*
+		 * Multiply TF by Inverse Document Frequency (IDF) IDF = 1 + log (total number
+		 * of methods / number of methods with specified token)
+		 * 
+		 * In one list -> 1 + log(2/1) = 1.6931472 In both lists -> 1 + log(2/2) = 1
+		 */
 		double cosine, v1, v2, length_v1 = 0, length_v2 = 0, dotProduct = 0;
-		
-		for(String s: unionSet) {
-			//Set current vector pairs' frequencies to 0)
+
+		for (String s : unionSet) {
+			// Set current vector pairs' frequencies to 0)
 			v1 = 0;
 			v2 = 0;
-			
-			
-			if(map1.containsKey(s)) {
-				v1 = map1.get(s).doubleValue(); 
-				if(!map2.containsKey(s)) { // Token unique to map1
-					v1 *= 1.6931472; 
+
+			if (map1.containsKey(s)) {
+				v1 = map1.get(s).doubleValue();
+				if (!map2.containsKey(s)) { // Token unique to map1
+					v1 *= 1.6931472;
 				}
-				length_v1 += v1*v1;  
+				length_v1 += v1 * v1;
 			}
-			if(map2.containsKey(s)) {
+			if (map2.containsKey(s)) {
 				v2 = map2.get(s).doubleValue();
-				if(!map1.containsKey(s)) { // Token unique to map2
+				if (!map1.containsKey(s)) { // Token unique to map2
 					v2 *= 1.6931472;
 				}
-				length_v2 += v2*v2; 
+				length_v2 += v2 * v2;
 			}
-			dotProduct += v1*v2;
+			dotProduct += v1 * v2;
 		}
-		
-		//Compute the cosine similarity
-		cosine = dotProduct/( Math.sqrt(length_v1)*(Math.sqrt(length_v2)));
-		
-		//Return percentage
-		return (cosine*100);
+
+		// Compute the cosine similarity
+		cosine = dotProduct / (Math.sqrt(length_v1) * (Math.sqrt(length_v2)));
+
+		// Return percentage
+		return (cosine * 100);
 	}
-	
+
 	/**
-	 * Compute the longest common subsequence between two methods 
+	 * Compute the longest common subsequence between two methods
 	 */
-	public static int LCSLength(ArrayList<Token> X, ArrayList<Token> Y, int m, int n, 
-								Map<String, Integer> lookup)
-	{
+	public static int LCSLength(ArrayList<Token> X, ArrayList<Token> Y, int m, int n, Map<String, Integer> lookup) {
 		// return if we have reached the end of either string
 		if (m == 0 || n == 0)
 			return 0;
@@ -115,18 +186,15 @@ public class Parser {
 		// construct a unique map key from dynamic elements of the input
 		String key = m + "|" + n;
 
-		// if sub-problem is seen for the first time, solve it and 
+		// if sub-problem is seen for the first time, solve it and
 		// store its result in a map
-		if (!lookup.containsKey(key))
-		{
+		if (!lookup.containsKey(key)) {
 			// if last character of X and Y matches
 			if (X.get(m - 1).getText().equals(Y.get(n - 1).getText())) {
 				lookup.put(key, LCSLength(X, Y, m - 1, n - 1, lookup) + 1);
-			} 
-			else {
+			} else {
 				// else if last character of X and Y don't match
-				lookup.put(key, Integer.max(LCSLength(X, Y, m, n - 1, lookup),
-						LCSLength(X, Y, m - 1, n, lookup)));
+				lookup.put(key, Integer.max(LCSLength(X, Y, m, n - 1, lookup), LCSLength(X, Y, m - 1, n, lookup)));
 			}
 		}
 		// return the subproblem solution from the map
@@ -135,9 +203,9 @@ public class Parser {
 
 	/**
 	 * Looks in the Token ArrayList. Looks for features that signifies the start of
-	 * a method. I.E public, private (or none), then a return type, name, and parameters (if
-	 * any) (Finds the start and end of a method)
-	 * TODO some methods are being omitted 
+	 * a method. I.E public, private (or none), then a return type, name, and
+	 * parameters (if any) (Finds the start and end of a method) TODO some methods
+	 * are being omitted
 	 * 
 	 * @param file
 	 * @param start
@@ -169,16 +237,15 @@ public class Parser {
 				}
 				if (!(file.get(indices[1]) instanceof TLBrace)) { // { should be immediately after )
 					continue;
-				} 
-				else {
-					// Match up braces with one another and only terminate when finding the method's '}'
+				} else {
+					// Match up braces with one another and only terminate when finding the method's
+					// '}'
 					lbracecounter = 1;
 					for (indices[1]++; (lbracecounter != 0) && (indices[1] < file.size()); indices[1]++) {
-						
+
 						if (file.get(indices[1]) instanceof TLBrace) {
 							lbracecounter++;
-						}
-						else if (file.get(indices[1]) instanceof TRBrace) {
+						} else if (file.get(indices[1]) instanceof TRBrace) {
 							lbracecounter--;
 						}
 					}
@@ -200,8 +267,9 @@ public class Parser {
 
 	/**
 	 * Cleans up tokens/gets rid of unused tokens
+	 * 
 	 * @param t_large - An ArrayList of Tokens
-	 * @return tlist  - A cleaned up ArrayList of unused Tokens 
+	 * @return tlist - A cleaned up ArrayList of unused Tokens
 	 */
 	public static ArrayList<Token> sanitize(ArrayList<Token> t_large) {
 		// NOTE: this method may become unnecessary if Ignored Tokens aren't produced by
@@ -218,12 +286,14 @@ public class Parser {
 		return tlist;
 	}
 
-	/** Takes in an array of tokens with a start and end point and returns a smaller
+	/**
+	 * Takes in an array of tokens with a start and end point and returns a smaller
 	 * array between those two points
+	 * 
 	 * @param rec   - An ArrayList of tokens
-	 * @param start - starting point 
+	 * @param start - starting point
 	 * @param end   - ending point
-	 */ 
+	 */
 	public static ArrayList<Token> subarray(ArrayList<Token> rec, int start, int end) {
 		int s = start;
 		int e = end;
