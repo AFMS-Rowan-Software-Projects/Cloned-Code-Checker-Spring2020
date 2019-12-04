@@ -19,14 +19,17 @@ public class Parser {
 		double smallerSize = (list1.size() < list2.size()) ? list1.size() : list2.size();
 		Map<String, Integer> lookup = new HashMap<>();
 
-		// System.out.println("\nCosine " + cosineSimilarity(list1, list2));
-		// System.out.println("\nLCS " + LCSLength(list1, list2, list1.size(),
-		// list2.size(), lookup) / smallerSize * 100);
-		//System.out.println("Naive" + naiveSimilarity(list1, list2));
+		//System.out.println("\nCosine " + cosineSimilarity(list1, list2));
+		//System.out.println("LCS " + LCSLength(list1, list2, list1.size(),
+		//list2.size(), lookup) / smallerSize * 100);
+		//System.out.println("Naive: " + naiveSimilarity(list1, list2));
+		//System.out.println("Weighted Cosine: " + ((cosineSimilarity(list1, list2)*(naiveSimilarity(list1, list2)))));
+		//System.out.println("Weighted LCS: " + (((LCSLength(list1, list2, list1.size(), list2.size(), lookup) / smallerSize) * 100) * (naiveSimilarity(list1, list2))));
+
 
 		// Average of all approaches
-		return ((naiveSimilarity(list1, list2) * .2) + (cosineSimilarity(list1, list2) * .4)
-				+ ((LCSLength(list1, list2, list1.size(), list2.size(), lookup) / smallerSize) * 100) * .4);
+		return (/*(naiveSimilarity(list1, list2) * .2)*/ +  ((cosineSimilarity(list1, list2)*(naiveSimilarity(list1, list2)))  * .5) 
+				+ (((LCSLength(list1, list2, list1.size(), list2.size(), lookup) / smallerSize) * 100) * (naiveSimilarity(list1, list2))) * .5);
 	}
 
 	/*
@@ -52,7 +55,13 @@ public class Parser {
 			largerList = list1;
 			smallerList = list2;
 		}
+		
 
+		// Naive 1 to 1 Similarity, Works on small sample sets but has flaws on
+		// large input sizes, decided not to implement, but can be used if accuracy 
+		// needs to be more specific
+		
+		/*
 		// find the first non header token in the smaller list
 		// first token after first "{"
 		for (int i = 0; i < 30; i++) {
@@ -62,16 +71,21 @@ public class Parser {
 				break;
 			}
 		}
+		System.out.println("small method start: " + smallerList.get(smallStart).getText());
 
-		// exclude everything before { and the }
-		int total = (smallerList.size() - 1) - (smallStart + 1);
+		// exclude everything before { and NOT THE  }
+		int total = (smallerList.size()) - (smallStart);
+		System.out.println("total small list " + smallerList.size());
+		System.out.println("total size of small method: " + total);
 
 		for (int i = 0; i < 30; i++) {
 			if (largerList.get(i).getText().equals("{")) {
-				largeStart = i;
+				largeStart = i + 1;
 				break;
 			}
 		}
+		System.out.println();
+		System.out.println("Large Method no header Start: " + largeStart);
 
 		// find where to start comparing token to token in the big list
 		for (int i = largeStart; i < largerList.size(); i++) {
@@ -81,6 +95,7 @@ public class Parser {
 				break;
 			}
 		}
+		System.out.println("\nLarge Method first hit: " + startPoint + " : " + largerList.get(startPoint).getText());
 
 		// comparison between the larger list and the smaller list
 		// starting at the first token of the smaller list within the larger one
@@ -95,10 +110,19 @@ public class Parser {
 		}
 
 		double percent = (matches * 100) / total;
+		*/
 		
+		double weight = smallerList.size() *100 / largerList.size();
+		weight = weight / 100;
+		//System.out.println(weight);
+		if (weight > .5) {
+			weight = 1;
+		}
 		// weighted percent to method size differences 
-		return percent * (smallerList.size() / largerList.size());
+		return weight;
 	}
+	
+	
 
 	/**
 	 * Compute the cosine similarity of two methods

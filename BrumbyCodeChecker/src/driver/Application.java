@@ -106,10 +106,12 @@ public class Application {
 			}
 		} // end of for(int i =...)
 
+		int methodsAffected = 0;
 		// All directories processed and all methods added
 		StringBuilder duplicatePaths = new StringBuilder();
 		duplicatePaths.append("\nDuplicate found in the following files:\n");
 		for (TokenizedMethod method : similarMethods) {
+			methodsAffected++;
 			duplicatePaths.append("\n").append(method.toString()).append("\n");
 		}
 
@@ -135,7 +137,7 @@ public class Application {
 
 		// built output for information window
 		String outputString = new StringBuilder().append("Total Files: " + totalFiles + "\n")
-				.append("Affected Files: " + filesAffected + "\n").toString();
+				.append("Affected Methods: " + methodsAffected + "\n").toString();
 
 		// return the formatted information to be used by the plugin output window
 		return outputString;
@@ -228,8 +230,10 @@ public class Application {
 			}
 		} // end of for(int i =...)
 
+		int methodsAffected = 0;
 		// All directories processed and all methods added
 		for (TokenizedMethod method : similarMethods) {
+			methodsAffected++;
 			System.out.println("\nDuplicate found in the following methods:");
 			System.out.println(method.toString());
 			// locAffected += method.linesAffected();
@@ -237,6 +241,7 @@ public class Application {
 
 		System.out.println("Total Files: " + totalFiles);
 		System.out.println("Affected Files: " + filesAffected);
+		System.out.println("Affected Methods: " + methodsAffected);
 		// System.out.println("Lines of code affected: " + locAffected);
 	}
 }
