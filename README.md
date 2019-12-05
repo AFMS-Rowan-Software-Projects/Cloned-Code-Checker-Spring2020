@@ -38,34 +38,43 @@ The Brumby Code Checker is a redundancy code scanner to effectively find and fla
 # Results: 
 Absolute file path names and line in the source file is saved and then grouped duplicates together, prints out a report:
 
-· 2100 files in about 4 minutes
+· 750 files in about 2 minutes
 
-· 553 files containing duplicates
+· 425 files containing duplicates
 
-· 3500 lines of code
+· 270,000 method comparisons (computing all matches, 0% and above) 
+
 ```
-Duplicate found in the following files:  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/java_lexer/Lexer.java:getText:407  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/lexer/Lexer.java:getText:407  
-  
-Duplicate found in the following files:  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/java_lexer/Lexer.java:id:1003  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/lexer/Lexer.java:id:1186  
-  
-Duplicate found in the following files:  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/node/EOF.java:clone:23  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/node/TLBrace.java:clone:23  
-  
-Duplicate found in the following files:  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/node/TBlank.java:clone:23  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/node/TDocumentationComment.java:clone:23  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/node/TIdentifier.java:clone:23  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/node/TNumericConstant.java:clone:23  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/node/TTextLiteral.java:clone:23  
-/home/username/test/RU-Software-Engineering/BrumbyCodeChecker/src/sablecc/node/TUnknown.java:clone:23  
-Total Files: 44  
-Affected Files: 7  
-Lines of code affected: 36
+Specify a percentage for a close match: 70
+
+Duplicate found in the following methods:
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test2:  13
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test1:  2
+----------> 75.85%
+
+Duplicate found in the following methods:
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test3:  26
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test1:  2
+----------> 76.25%
+
+Duplicate found in the following methods:
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test4:  36
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test1:  2
+----------> 100.00%
+
+Duplicate found in the following methods:
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test4:  36
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test2:  13
+----------> 75.85%
+
+Duplicate found in the following methods:
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test4:  36
+C:\Users\cstil\workspace\TestingDuplicate\src\Test2.java:  test3:  26
+----------> 76.25%
+Total Files: 1
+Affected Files: 1
+Affected Methods: 5
+
    ```
 
 # License 
