@@ -39,22 +39,22 @@ public class Application {
 	public String plugin(String path, String type, int closeMatch) {
 		ArrayList<String> directory_contents;
 		ArrayList<TokenizedMethod> methods = new ArrayList<TokenizedMethod>();
-		ArrayList<Token> file_tokens, method_tokens;
 		ArrayList<TokenizedMethod> similarMethods = new ArrayList<TokenizedMethod>();
+		ArrayList<Token> file_tokens, method_tokens;
 
 		String current_file;
 		String qualified_name;
 		String fileCompared = " ";
-		int[] method_indices = new int[2];
-
-		boolean isDuplicate;
-		double perc = 0.0;
-		int count = 0;
-		int totalFiles = 0;
-		int filesAffected = 0;
-		ArrayList<String> filesWithDuplicates = new ArrayList<>();
+		String methodCompared = " ";
+	
 		Renamer rename;
 
+		double perc = 0.0;
+		int[] method_indices = new int[2];		
+		int totalFiles = 0;
+		int filesAffected = 0;
+		int methodsAffected = 0;
+		
 		// Looks in the Arguments parameters in Run Configurations
 		String[] parts = path.split(" ");
 		for (String part : parts) {
@@ -90,11 +90,23 @@ public class Application {
 							// If similarity percentage is equal or more than the specified close match,
 							// store it
 							if (perc >= closeMatch) {
+								
 								// Update count of affected files
 								if (fileCompared.equals(file)) {
 									filesAffected++;
 									fileCompared = " ";
 								}
+								// Update count of affected methods
+								if (methodCompared.equals(qualified_name)) {
+									if(methodsAffected == 0) {
+										methodsAffected = 2;
+									}
+									else {
+										methodsAffected++;
+									}
+									methodCompared = " ";
+								}
+								
 								// add to list of similar methods
 								similarMethods.add(new TokenizedMethod(qualified_name, method.getLocation(), perc));
 							}
@@ -106,12 +118,10 @@ public class Application {
 			}
 		} // end of for(int i =...)
 
-		int methodsAffected = 0;
 		// All directories processed and all methods added
 		StringBuilder duplicatePaths = new StringBuilder();
 		duplicatePaths.append("\nDuplicate found in the following files:\n");
 		for (TokenizedMethod method : similarMethods) {
-			methodsAffected++;
 			duplicatePaths.append("\n").append(method.toString()).append("\n");
 		}
 
@@ -137,7 +147,8 @@ public class Application {
 
 		// built output for information window
 		String outputString = new StringBuilder().append("Total Files: " + totalFiles + "\n")
-				.append("Affected Methods: " + methodsAffected + "\n").toString();
+				.append("Affected Methods: " + methodsAffected + "\n")
+				.append("Affected Lines: " + LinesAffected.getLinesAffected() + "\n").toString();
 
 		// return the formatted information to be used by the plugin output window
 		return outputString;
@@ -156,15 +167,16 @@ public class Application {
 		String current_file;
 		String qualified_name;
 		String fileCompared = " ";
-
+		String methodCompared = " ";
+	
 		Renamer rename;
 
 		double perc = 0.0;
-
-		int[] method_indices = new int[2];
+		int[] method_indices = new int[2];		
 		int totalFiles = 0;
-		int locAffected = 0;
 		int filesAffected = 0;
+		int methodsAffected = 0;
+		
 
 		// Get close-match percentage from user
 		Scanner in = new Scanner(System.in);
@@ -183,9 +195,8 @@ public class Application {
 				current_file = CFilesReader.readFile(file);
 				// Clean up unused tokens in all files and store it into the ArrayList
 				// "file_tokens"
-				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file, args[args.length - 1])); // convert to
-																											// tokens
-																											// (lang)
+				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file, args[args.length - 1])); 
+																											
 				fileCompared = file;
 
 				method_indices[0] = 0;
@@ -202,6 +213,7 @@ public class Application {
 						qualified_name = file + ":  " + rename.getTokens().get(1).getText() + ":  "
 								+ rename.getTokens().get(1).getLine(); // saves (filepath : method name : line number)
 																		// as a string
+						methodCompared = qualified_name;
 						rename.parseFile();
 						method_tokens = rename.getTokens(); // tokens with id assignments
 
@@ -213,12 +225,23 @@ public class Application {
 							// If similarity percentage is equal or more than the specified close match,
 							// store it
 							if (perc >= closeMatch) {
+								
 								// Update count of affected files
 								if (fileCompared.equals(file)) {
 									filesAffected++;
 									fileCompared = " ";
 								}
-
+								// Update count of affected methods
+								if (methodCompared.equals(qualified_name)) {
+									if(methodsAffected == 0) {
+										methodsAffected = 2;
+									}
+									else {
+										methodsAffected++;
+									}
+									methodCompared = " ";
+								}
+								
 								// add to list of similar methods
 								similarMethods.add(new TokenizedMethod(qualified_name, method.getLocation(), perc));
 							}
@@ -230,18 +253,16 @@ public class Application {
 			}
 		} // end of for(int i =...)
 
-		int methodsAffected = 0;
+	
 		// All directories processed and all methods added
 		for (TokenizedMethod method : similarMethods) {
-			methodsAffected++;
 			System.out.println("\nDuplicate found in the following methods:");
 			System.out.println(method.toString());
-			// locAffected += method.linesAffected();
 		}
 
 		System.out.println("Total Files: " + totalFiles);
 		System.out.println("Affected Files: " + filesAffected);
 		System.out.println("Affected Methods: " + methodsAffected);
-		// System.out.println("Lines of code affected: " + locAffected);
+		System.out.println("Affected Lines: " + LinesAffected.getLinesAffected());
 	}
 }
