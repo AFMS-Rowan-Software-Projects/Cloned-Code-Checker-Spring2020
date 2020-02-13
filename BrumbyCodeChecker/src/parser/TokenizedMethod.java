@@ -8,10 +8,14 @@ import java.util.ArrayList;
  * Holds tokens from each method within a file
  */
 public class TokenizedMethod {
+	
+	private static int instanceCounter;
+	
 	private String fileLocation;
 	private String secondFileLocation;
 	private ArrayList<Token> tokens;
 	private double similarityPercent;
+	private int identifier;
 
 	/**
 	 * To be stored in a list of methods to keep checking for similarity
@@ -22,6 +26,8 @@ public class TokenizedMethod {
 	public TokenizedMethod(String filePath, ArrayList<Token> tokenlist) {
 		fileLocation = filePath;
 		tokens = tokenlist;
+		instanceCounter++;
+		identifier = instanceCounter;
 	}
 
 	/**
@@ -36,6 +42,8 @@ public class TokenizedMethod {
 		fileLocation = filePath1;
 		secondFileLocation = filepath2;
 		similarityPercent = percent;
+		instanceCounter++;
+		identifier = instanceCounter;
 	}
 	
 	public ArrayList<Token> getTokens() {
@@ -44,6 +52,16 @@ public class TokenizedMethod {
 
 	public String getLocation() {
 		return fileLocation;
+	}
+	
+	/**
+	 * Returns the unique identifier for the TokenizedMethod. 
+	 * Each instance will have a different identifier.
+	 * 
+	 * @return	The unique identifier
+	 */
+	public int getIdentifier() {
+		return identifier;
 	}
 
 	public String toString() {
