@@ -167,6 +167,8 @@ public class Application {
 		//Cluster list implementation
 		ArrayList<ArrayList<Integer>> clusterList = new ArrayList<ArrayList<Integer>>();
 		ArrayList<Integer> innerCluster = new ArrayList<>();
+		//Distance Matrix
+		HashMap<Integer,HashMap<Integer,Double>> distanceMatrix = new HashMap<Integer,HashMap<Integer,Double>>();
 
 		String current_file;
 		String qualified_name;
@@ -252,6 +254,13 @@ public class Application {
 								//Add all unique tokenized methods identifiers to an Array List
 								if(!(innerCluster.contains(method.identifier))) {
 									innerCluster.add(method.identifier);
+									
+								//creating a inner HashMap that will be applied to a new key
+								HashMap<Integer,Double> innerHashMap =new HashMap<Integer,Double>();
+								//Putting the similar method and percent in the inner hashMap
+								innerHashMap.put(method_indices[0], perc);
+								//Putting the method and the hashMap together
+								distanceMatrix.put(method_indices[1], innerHashMap);
 								}
 							}
 						}
