@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import sablecc.node.*;
 import parser.*;
@@ -252,8 +253,8 @@ public class Application {
 								similarMethods.add(new TokenizedMethod(qualified_name, method.getLocation(), perc));
 								
 								//Add all unique tokenized methods identifiers to an Array List
-								if(!(innerCluster.contains(method.identifier))) {
-									innerCluster.add(method.identifier);
+								if(!(innerCluster.contains(method.getIdentifier()))) {
+									innerCluster.add(method.getIdentifier());
 									
 								//creating a inner HashMap that will be applied to a new key
 								HashMap<Integer,Double> innerHashMap =new HashMap<Integer,Double>();
