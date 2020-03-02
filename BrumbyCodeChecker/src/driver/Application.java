@@ -41,9 +41,6 @@ public class Application {
 		ArrayList<TokenizedMethod> methods = new ArrayList<TokenizedMethod>();
 		ArrayList<TokenizedMethod> similarMethods = new ArrayList<TokenizedMethod>();
 		ArrayList<Token> file_tokens, method_tokens;
-		//Cluster list implementation
-		ArrayList<ArrayList<Integer>> clusterList = new ArrayList<ArrayList<Integer>>();
-		ArrayList<Integer> innerCluster = new ArrayList<>();
 
 		String current_file;
 		String qualified_name;
@@ -113,10 +110,6 @@ public class Application {
 								// add to list of similar methods
 								similarMethods.add(new TokenizedMethod(qualified_name, method.getLocation(), perc));
 								
-								//Add all unique tokenized methods identifiers to an Array List
-								if(!(innerCluster.contains(method.identifier))) {
-									innerCluster.add(method.identifier);
-								}
 							}
 						}
 						// Add to list of unique methods to keep checking
@@ -125,9 +118,6 @@ public class Application {
 				}
 			}
 		} // end of for(int i =...)
-
-		//Add the ArrayList of method identifiers to the cluster list
-		clusterList.add(innerCluster);
 		
 		// All directories processed and all methods added
 		StringBuilder duplicatePaths = new StringBuilder();
@@ -174,6 +164,9 @@ public class Application {
 		ArrayList<TokenizedMethod> methods = new ArrayList<TokenizedMethod>();
 		ArrayList<TokenizedMethod> similarMethods = new ArrayList<TokenizedMethod>();
 		ArrayList<Token> file_tokens, method_tokens;
+		//Cluster list implementation
+		ArrayList<ArrayList<Integer>> clusterList = new ArrayList<ArrayList<Integer>>();
+		ArrayList<Integer> innerCluster = new ArrayList<>();
 
 		String current_file;
 		String qualified_name;
@@ -255,6 +248,11 @@ public class Application {
 								
 								// add to list of similar methods
 								similarMethods.add(new TokenizedMethod(qualified_name, method.getLocation(), perc));
+								
+								//Add all unique tokenized methods identifiers to an Array List
+								if(!(innerCluster.contains(method.identifier))) {
+									innerCluster.add(method.identifier);
+								}
 							}
 						}
 						// Add to list of unique methods to keep checking
@@ -264,6 +262,8 @@ public class Application {
 			}
 		} // end of for(int i =...)
 
+		//Add the ArrayList of method identifiers to the cluster list
+		clusterList.add(innerCluster);
 	
 		// All directories processed and all methods added
 		for (TokenizedMethod method : similarMethods) {
