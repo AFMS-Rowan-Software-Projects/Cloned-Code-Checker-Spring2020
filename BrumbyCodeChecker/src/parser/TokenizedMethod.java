@@ -26,8 +26,9 @@ public class TokenizedMethod {
 	public TokenizedMethod(String filePath, ArrayList<Token> tokenlist) {
 		fileLocation = filePath;
 		tokens = tokenlist;
-		instanceCounter++;
 		identifier = instanceCounter;
+		instanceCounter++;
+		
 	}
 
 	/**
@@ -42,8 +43,8 @@ public class TokenizedMethod {
 		fileLocation = filePath1;
 		secondFileLocation = filepath2;
 		similarityPercent = percent;
-		instanceCounter++;
-		identifier = instanceCounter;
+		//instanceCounter++;
+		//identifier = instanceCounter;
 	}
 	
 	public ArrayList<Token> getTokens() {

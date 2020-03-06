@@ -47,15 +47,15 @@ public class Application {
 		String qualified_name;
 		String fileCompared = " ";
 		String methodCompared = " ";
-	
+
 		Renamer rename;
 
 		double perc = 0.0;
-		int[] method_indices = new int[2];		
+		int[] method_indices = new int[2];
 		int totalFiles = 0;
 		int filesAffected = 0;
 		int methodsAffected = 0;
-		
+
 		// Looks in the Arguments parameters in Run Configurations
 		String[] parts = path.split(" ");
 		for (String part : parts) {
@@ -91,7 +91,7 @@ public class Application {
 							// If similarity percentage is equal or more than the specified close match,
 							// store it
 							if (perc >= closeMatch) {
-								
+
 								// Update count of affected files
 								if (fileCompared.equals(file)) {
 									filesAffected++;
@@ -99,18 +99,17 @@ public class Application {
 								}
 								// Update count of affected methods
 								if (methodCompared.equals(qualified_name)) {
-									if(methodsAffected == 0) {
+									if (methodsAffected == 0) {
 										methodsAffected = 2;
-									}
-									else {
+									} else {
 										methodsAffected++;
 									}
 									methodCompared = " ";
 								}
-								
+
 								// add to list of similar methods
 								similarMethods.add(new TokenizedMethod(qualified_name, method.getLocation(), perc));
-								
+
 							}
 						}
 						// Add to list of unique methods to keep checking
@@ -119,7 +118,7 @@ public class Application {
 				}
 			}
 		} // end of for(int i =...)
-		
+
 		// All directories processed and all methods added
 		StringBuilder duplicatePaths = new StringBuilder();
 		duplicatePaths.append("\nDuplicate found in the following files:\n");
@@ -165,25 +164,24 @@ public class Application {
 		ArrayList<TokenizedMethod> methods = new ArrayList<TokenizedMethod>();
 		ArrayList<TokenizedMethod> similarMethods = new ArrayList<TokenizedMethod>();
 		ArrayList<Token> file_tokens, method_tokens;
-		//Cluster list implementation
+		// Cluster list implementation
 		ArrayList<ArrayList<Integer>> clusterList = new ArrayList<ArrayList<Integer>>();
 		ArrayList<Integer> innerCluster = new ArrayList<>();
-		//Distance Matrix
-		HashMap<Integer,HashMap<Integer,Double>> distanceMatrix = new HashMap<Integer,HashMap<Integer,Double>>();
+		// Distance Matrix
+		HashMap<Integer, HashMap<Integer, Double>> distanceMatrix = new HashMap<Integer, HashMap<Integer, Double>>();
 
 		String current_file;
 		String qualified_name;
 		String fileCompared = " ";
 		String methodCompared = " ";
-	
+
 		Renamer rename;
 
 		double perc = 0.0;
-		int[] method_indices = new int[2];		
+		int[] method_indices = new int[2];
 		int totalFiles = 0;
 		int filesAffected = 0;
 		int methodsAffected = 0;
-		
 
 		// Get close-match percentage from user
 		Scanner in = new Scanner(System.in);
@@ -202,8 +200,8 @@ public class Application {
 				current_file = CFilesReader.readFile(file);
 				// Clean up unused tokens in all files and store it into the ArrayList
 				// "file_tokens"
-				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file, args[args.length - 1])); 
-																											
+				file_tokens = Parser.sanitize(Lister.ConvertToList(current_file, args[args.length - 1]));
+
 				fileCompared = file;
 
 				method_indices[0] = 0;
@@ -223,8 +221,13 @@ public class Application {
 						methodCompared = qualified_name;
 						rename.parseFile();
 						method_tokens = rename.getTokens(); // tokens with id assignments
+						
+						TokenizedMethod currentTokenizedMethod = new TokenizedMethod(qualified_name, method_tokens);
+						HashMap<Integer, Double> innerHashMap = new HashMap<Integer, Double>();
 
 						for (TokenizedMethod method : methods) {
+
+							
 
 							// compute similarity percent
 							perc = Parser.similarity(method.getTokens(), method_tokens);
@@ -232,7 +235,7 @@ public class Application {
 							// If similarity percentage is equal or more than the specified close match,
 							// store it
 							if (perc >= closeMatch) {
-								
+
 								// Update count of affected files
 								if (fileCompared.equals(file)) {
 									filesAffected++;
@@ -240,41 +243,50 @@ public class Application {
 								}
 								// Update count of affected methods
 								if (methodCompared.equals(qualified_name)) {
-									if(methodsAffected == 0) {
+									if (methodsAffected == 0) {
 										methodsAffected = 2;
-									}
-									else {
+									} else {
 										methodsAffected++;
 									}
 									methodCompared = " ";
 								}
-								
+
 								// add to list of similar methods
-								similarMethods.add(new TokenizedMethod(qualified_name, method.getLocation(), perc));
+								similarMethods.add(new TokenizedMethod(qualified_name,
+										method.getLocation(), perc));
+
 								
-								//Add all unique tokenized methods identifiers to an Array List
-								if(!(innerCluster.contains(method.getIdentifier()))) {
-									innerCluster.add(method.getIdentifier());
+									// Putting the similar method and percent in the inner hashMap
+									innerHashMap.put(method.getIdentifier(), perc);
 									
-								//creating a inner HashMap that will be applied to a new key
-								HashMap<Integer,Double> innerHashMap =new HashMap<Integer,Double>();
-								//Putting the similar method and percent in the inner hashMap
-								innerHashMap.put(method_indices[0], perc);
-								//Putting the method and the hashMap together
-								distanceMatrix.put(method_indices[1], innerHashMap);
+								// if two tokenized methods are similar and ones inner hashmap doesnt contain the other, then add it
+								if(!distanceMatrix.get(method.getIdentifier()).containsKey(currentTokenizedMethod.getIdentifier()))
+									distanceMatrix.get(method.getIdentifier()).put(currentTokenizedMethod.getIdentifier(), perc);
+
+								
+
+								// Add all unique tokenized methods identifiers to an Array List
+								if (!(innerCluster.contains(method.getIdentifier()))) {
+									innerCluster.add(method.getIdentifier());
+
+									
+
 								}
 							}
 						}
 						// Add to list of unique methods to keep checking
-						methods.add(new TokenizedMethod(qualified_name, method_tokens));
+						methods.add(currentTokenizedMethod);
+						// Putting the method and the hashMap together
+						distanceMatrix.put(currentTokenizedMethod.getIdentifier(), innerHashMap);
+						
 					}
 				}
 			}
 		} // end of for(int i =...)
 
-		//Add the ArrayList of method identifiers to the cluster list
+		// Add the ArrayList of method identifiers to the cluster list
 		clusterList.add(innerCluster);
-	
+
 		// All directories processed and all methods added
 		for (TokenizedMethod method : similarMethods) {
 			System.out.println("\nDuplicate found in the following methods:");
@@ -285,5 +297,9 @@ public class Application {
 		System.out.println("Affected Files: " + filesAffected);
 		System.out.println("Affected Methods: " + methodsAffected);
 		System.out.println("Affected Lines: " + LinesAffected.getLinesAffected());
+
+		// test the distance matrix
+		System.out.println("\nTesting Distance Matrix:");
+		distanceMatrix.forEach((key, value) -> System.out.println("[Key] : " + key + " [Value] : " + value));
 	}
 }
