@@ -269,6 +269,9 @@ public class Application {
 								if (!(innerCluster.contains(method.getIdentifier()))) {
 									innerCluster.add(method.getIdentifier());
 
+								if(!(innerCluster.contains(currentTokenizedMethod.getIdentifier()))) {
+									innerCluster.add(currentTokenizedMethod.getIdentifier());
+								}
 									
 
 								}
@@ -301,5 +304,8 @@ public class Application {
 		// test the distance matrix
 		System.out.println("\nTesting Distance Matrix:");
 		distanceMatrix.forEach((key, value) -> System.out.println("[Key] : " + key + " [Value] : " + value));
+		
+		// test the cluster list
+		//System.out.println(clusterList);
 	}
 }
