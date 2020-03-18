@@ -264,17 +264,15 @@ public class Application {
 									distanceMatrix.get(method.getIdentifier()).put(currentTokenizedMethod.getIdentifier(), perc);
 
 								
-
 								// Add all unique tokenized methods identifiers to an Array List
 								if (!(innerCluster.contains(method.getIdentifier()))) {
 									innerCluster.add(method.getIdentifier());
-
+								}
+								
 								if(!(innerCluster.contains(currentTokenizedMethod.getIdentifier()))) {
 									innerCluster.add(currentTokenizedMethod.getIdentifier());
 								}
-									
-
-								}
+								
 							}
 						}
 						// Add to list of unique methods to keep checking
