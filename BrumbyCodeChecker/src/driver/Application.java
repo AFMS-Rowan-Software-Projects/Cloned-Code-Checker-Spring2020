@@ -287,6 +287,9 @@ public class Application {
 			}
 		} // end of for(int i =...)
 
+		// remove any keys in the distance matrix whose inner hashmap is empty (no similar methods)
+		distanceMatrix.keySet().removeIf(key -> distanceMatrix.get(key).size() == 0);
+		
 		// Add the ArrayList of method identifiers to the cluster list
 		clusterList.add(innerCluster);
 
@@ -302,8 +305,8 @@ public class Application {
 		System.out.println("Affected Lines: " + LinesAffected.getLinesAffected());
 
 		// test the distance matrix
-		System.out.println("\nTesting Distance Matrix:");
-		distanceMatrix.forEach((key, value) -> System.out.println("[Key] : " + key + " [Value] : " + value));
+		//System.out.println("\nTesting Distance Matrix:");
+		//distanceMatrix.forEach((key, value) -> System.out.println("[Key] : " + key + " [Value] : " + value));
 		
 		// test the cluster list
 		//System.out.println(clusterList);
