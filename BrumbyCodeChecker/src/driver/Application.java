@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import sablecc.node.*;
 import parser.*;
 import tokenlister.*;
@@ -37,7 +39,7 @@ public class Application {
 	 *         to the screen
 	 */
 
-	public String plugin(String path, String type, int closeMatch) {
+	/*public String plugin(String path, String type, int closeMatch) {
 		ArrayList<String> directory_contents;
 		ArrayList<TokenizedMethod> methods = new ArrayList<TokenizedMethod>();
 		ArrayList<TokenizedMethod> similarMethods = new ArrayList<TokenizedMethod>();
@@ -159,6 +161,7 @@ public class Application {
 	 * To be used when running the application as a normal java application Takes in
 	 * the file information via configuration and file io
 	 */
+	
 	public static void main(String[] args) {
 		ArrayList<String> directory_contents;
 		ArrayList<TokenizedMethod> methods = new ArrayList<TokenizedMethod>();
@@ -290,6 +293,53 @@ public class Application {
 		
 		// Add the ArrayList of method identifiers to the cluster list
 		clusterList.add(innerCluster);
+		
+				// test the cluster list before it is divided up
+				//System.out.println("Cluster List: " + clusterList);		
+	
+	//Clustering	
+		distanceMatrix.forEach((k,v) ->{ //give each key its own cluster -- there will be duplicate clusters
+			ArrayList<Integer> newCluster = new ArrayList<>();
+			newCluster.add(k);
+			newCluster.addAll(v.keySet());
+			clusterList.add(newCluster);
+					//Testing/Readability: System.out.println(k + " similar to "+ v.keySet()); 
+			});//end distanceMatrix.forEach
+		
+			clusterList.remove(innerCluster); //remove list of all methods from CL
+			
+			/*Removing duplicate clusters using LinkedHashSet
+			 * Sort each cluster first, so LHS can do its job
+			 * Only works for identical clusters (i.e. [[1,2],[1,2]], not for clusters like [[1,2],[1,2,3]]
+			 */
+			for(int i = 0; i < clusterList.size(); i++) {
+				Collections.sort(clusterList.get(i));
+			}
+			LinkedHashSet<ArrayList<Integer>> temp = new LinkedHashSet<ArrayList<Integer>>(clusterList);
+			clusterList.clear();
+			clusterList.addAll(temp);
+			temp.clear();
+			
+		/*Incomplete alternate algorithm for combining clusters of different 
+		 * sizes with 1 or more common elements
+		 */
+			/*for(int i = clusterList.size()-1; i >= 1 ; i--) {
+				for(int j = i-1; j >= 0  ; j--) {
+					if (clusterList.get(i).size() <= clusterList.get(j).size()) {
+						if(clusterList.get(j).containsAll(clusterList.get(i))) {
+							
+						}
+						else {
+							if(clusterList.get(i).containsAll(clusterList.get(j))) {
+								
+							}
+						}
+							
+					}
+				}
+				
+			}*/ 
+	//End of Clustering
 
 		// All directories processed and all methods added
 		for (TokenizedMethod method : similarMethods) {
@@ -302,11 +352,16 @@ public class Application {
 		System.out.println("Affected Methods: " + methodsAffected);
 		System.out.println("Affected Lines: " + LinesAffected.getLinesAffected());
 
+		
 		// test the distance matrix
 		//System.out.println("\nTesting Distance Matrix:");
 		//distanceMatrix.forEach((key, value) -> System.out.println("[Key] : " + key + " [Value] : " + value));
 		
-		// test the cluster list
-		//System.out.println(clusterList);
+		
+		// test the cluster list after clustering
+		//System.out.println("\nTesting Cluster List: " + clusterList);
+		
+		
 	}
+		
 }
