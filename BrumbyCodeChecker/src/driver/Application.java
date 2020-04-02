@@ -225,12 +225,12 @@ public class Application {
 						TokenizedMethod currentTokenizedMethod = new TokenizedMethod(qualified_name, method_tokens);
 						HashMap<Integer, Double> innerHashMap = new HashMap<Integer, Double>();
 
-						for (TokenizedMethod method : methods) {
+						for (TokenizedMethod comparedMethod : methods) {
 
 							
 
 							// compute similarity percent
-							perc = Parser.similarity(method.getTokens(), method_tokens);
+							perc = Parser.similarity(comparedMethod.getTokens(), method_tokens);
 
 							// If similarity percentage is equal or more than the specified close match,
 							// store it
@@ -253,40 +253,43 @@ public class Application {
 
 								// add to list of similar methods
 								similarMethods.add(new TokenizedMethod(qualified_name,
-										method.getLocation(), perc));
+										comparedMethod.getLocation(), perc));
 
 								
-									// Putting the similar method and percent in the inner hashMap
-									innerHashMap.put(method.getIdentifier(), perc);
+								// If the distance matrix doesn't already contain the two methods, add them
+								addToDistanceMatrix(currentTokenizedMethod.getIdentifier(), distanceMatrix);
+								addToDistanceMatrix(comparedMethod.getIdentifier(), distanceMatrix);
+								
 									
 								// if two tokenized methods are similar and ones inner hashmap doesnt contain the other, then add it
-								if(!distanceMatrix.get(method.getIdentifier()).containsKey(currentTokenizedMethod.getIdentifier()))
-									distanceMatrix.get(method.getIdentifier()).put(currentTokenizedMethod.getIdentifier(), perc);
-
 								
-								// Add all unique tokenized methods identifiers to an Array List
-								if (!(innerCluster.contains(method.getIdentifier()))) {
-									innerCluster.add(method.getIdentifier());
+								if(!distanceMatrix.get(comparedMethod.getIdentifier()).containsKey(currentTokenizedMethod.getIdentifier())) {
+									distanceMatrix.get(comparedMethod.getIdentifier()).put(currentTokenizedMethod.getIdentifier(), perc);
 								}
 								
+								if(!distanceMatrix.get(currentTokenizedMethod.getIdentifier()).containsKey(comparedMethod.getIdentifier())) {
+									distanceMatrix.get(currentTokenizedMethod.getIdentifier()).put(comparedMethod.getIdentifier(), perc);
+								}
+								
+
+								
+
+								// Add all unique tokenized methods identifiers to an Array List
+								if (!(innerCluster.contains(comparedMethod.getIdentifier()))) {
+									innerCluster.add(comparedMethod.getIdentifier());
+								}
+
 								if(!(innerCluster.contains(currentTokenizedMethod.getIdentifier()))) {
 									innerCluster.add(currentTokenizedMethod.getIdentifier());
 								}
-								
 							}
 						}
 						// Add to list of unique methods to keep checking
 						methods.add(currentTokenizedMethod);
-						// Putting the method and the hashMap together
-						distanceMatrix.put(currentTokenizedMethod.getIdentifier(), innerHashMap);
-						
 					}
 				}
 			}
 		} // end of for(int i =...)
-
-		// remove any keys in the distance matrix whose inner hashmap is empty (no similar methods)
-		distanceMatrix.keySet().removeIf(key -> distanceMatrix.get(key).size() == 0);
 		
 		// Add the ArrayList of method identifiers to the cluster list
 		clusterList.add(innerCluster);
@@ -303,10 +306,16 @@ public class Application {
 		System.out.println("Affected Lines: " + LinesAffected.getLinesAffected());
 
 		// test the distance matrix
-		//System.out.println("\nTesting Distance Matrix:");
-		//distanceMatrix.forEach((key, value) -> System.out.println("[Key] : " + key + " [Value] : " + value));
+		// System.out.println("\nTesting Distance Matrix:");
+		// distanceMatrix.forEach((key, value) -> System.out.println("[Key] : " + key + " [Value] : " + value));
 		
 		// test the cluster list
 		//System.out.println(clusterList);
+	}
+	
+	public static void addToDistanceMatrix(int methodIdentifier, HashMap<Integer, HashMap<Integer, Double>> distanceMatrix) {
+		if(!distanceMatrix.containsKey(methodIdentifier)) {
+			distanceMatrix.put(methodIdentifier, new HashMap<Integer, Double>());
+		}
 	}
 }
