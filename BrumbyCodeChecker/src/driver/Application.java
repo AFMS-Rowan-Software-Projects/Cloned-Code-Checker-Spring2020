@@ -293,6 +293,22 @@ public class Application {
 		
 		// Add the ArrayList of method identifiers to the cluster list
 		clusterList.add(innerCluster);
+		
+		//Clustering	
+		ArrayList<Integer> visited = new ArrayList<Integer>(); //for checking if currKey has already been processed
+		ArrayList<Integer> newCluster = new ArrayList<Integer>();
+		
+		for(int currKey : innerCluster) { 	//for each key in innerCluster
+			cluster(currKey, visited, newCluster, distanceMatrix); 
+		
+			if(! newCluster.isEmpty()) 	//keys that have already been processed will form an empty ArrayList
+				clusterList.add(newCluster); 
+			
+			newCluster= new ArrayList<Integer>();
+		}	
+		
+		clusterList.remove(innerCluster); //remove innerCluster (the set of all keys)
+    		//End of Clustering
 
 		// All directories processed and all methods added
 		for (TokenizedMethod method : similarMethods) {
@@ -316,6 +332,19 @@ public class Application {
 	public static void addToDistanceMatrix(int methodIdentifier, HashMap<Integer, HashMap<Integer, Double>> distanceMatrix) {
 		if(!distanceMatrix.containsKey(methodIdentifier)) {
 			distanceMatrix.put(methodIdentifier, new HashMap<Integer, Double>());
+		}
+	}
+	
+	/*Helper method to recursively add a key and its neighbors to a cluster*/
+	public static void cluster(int currKey, ArrayList<Integer> visited, ArrayList<Integer> newCluster, HashMap<Integer,HashMap<Integer, Double>> distanceMatrix) {
+		if(!(visited.contains(currKey))) { //if currKey has not been visited
+			
+			visited.add(currKey);  
+			newCluster.add(currKey);
+			
+			for(int x: distanceMatrix.get(currKey).keySet()) {
+				cluster(x, visited, newCluster, distanceMatrix);
+			}
 		}
 	}
 }
