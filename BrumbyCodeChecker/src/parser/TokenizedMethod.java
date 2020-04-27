@@ -69,4 +69,9 @@ public class TokenizedMethod {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return fileLocation + "\n" + secondFileLocation + "\n----------> " + df.format(similarityPercent) + "%";
 	}
+	
+	//Secondary toString for full report on clusterList
+	public String toString2() {
+		return fileLocation;
+	}
 }
