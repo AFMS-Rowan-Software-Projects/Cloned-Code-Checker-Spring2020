@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
 import sablecc.node.*;
 import parser.*;
@@ -327,6 +328,23 @@ public class Application {
 		
 		// test the cluster list
 		//System.out.println(clusterList);
+		
+		//Compares unique identifiers in the cluster list to an ArrayList of TokenizedMethods
+		//Will print a report on identifiers to are present in both
+		Iterator<ArrayList<Integer>> it = clusterList.iterator();
+		while(it.hasNext()) {
+			ArrayList<Integer> idArray = it.next();
+			System.out.println();
+			System.out.println("The following methods are similar to one another:");
+			//Need to get the identifiers from the cluster list
+			for (int nextMethod : idArray) {
+				//Need to get the TokenizedMethod to invoke toString() method on
+				for (TokenizedMethod method : methods) {
+					if(nextMethod == method.getIdentifier())
+						System.out.println(method.toString2());
+				}
+			}
+		}
 	}
 	
 	public static void addToDistanceMatrix(int methodIdentifier, HashMap<Integer, HashMap<Integer, Double>> distanceMatrix) {
