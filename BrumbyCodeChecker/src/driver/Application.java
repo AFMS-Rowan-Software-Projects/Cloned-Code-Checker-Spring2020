@@ -312,10 +312,10 @@ public class Application {
     		//End of Clustering
 
 		// All directories processed and all methods added
-		for (TokenizedMethod method : similarMethods) {
-			System.out.println("\nDuplicate found in the following methods:");
-			System.out.println(method.toString());
-		}
+//		for (TokenizedMethod method : similarMethods) {
+//			System.out.println("\nDuplicate found in the following methods:");
+//			System.out.println(method.toString());
+//		}
 
 		System.out.println("Total Files: " + totalFiles);
 		System.out.println("Affected Files: " + filesAffected);
